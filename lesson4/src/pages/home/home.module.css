@@ -1,0 +1,10 @@
+.background {
+    background-color: white;
+    background-image: radial-gradient(var(--gray-2) 1px, white 1px);
+    background-size: 18px 18px;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 90%;
+    margin: auto;
+  }
