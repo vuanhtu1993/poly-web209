@@ -3,7 +3,7 @@ import Header from '../../components/Header'
 import {Outlet} from 'react-router-dom'
 
 
-const UserLayout = () => {
+const UserLayout = (props: any) => {
     return (
         <>
             <Header/>
