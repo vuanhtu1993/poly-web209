@@ -5,14 +5,14 @@ import UploadImage from "../../../components/Product/UploadImage";
 import { createProduct } from "../../../api/product";
 import { useNavigate } from "react-router-dom";
 
-const {TextArea} = Input
+const { TextArea } = Input
 const { Option } = Select;
 
 const AddProductPage: React.FC = () => {
 	const navigate = useNavigate()
 	const onFinish = async (values: any) => {
 		console.log('Success:', values);
-		
+
 		try {
 			const data = await createProduct(values)
 			message.success("Tạo mới thành công")
@@ -40,74 +40,75 @@ const AddProductPage: React.FC = () => {
 					<Typography.Title level={5}>Thông tin sản phẩm</Typography.Title>
 					<Form
 						// name="product"
-						initialValues={{ }}
+						initialValues={{}}
 						onFinish={onFinish}
 						onFinishFailed={onFinishFailed}
 						autoComplete="on"
+						labelCol={{ span: 24 }}
 					>
 						<Form.Item
 							name="name"
-							labelCol={{span:24}}
+							labelCol={{ span: 24 }}
 							label="Tên sản phẩm"
 							rules={[{ required: true, message: 'Tên sản phẩm không được trống' }]}
 						>
-							<Input size="large"/>
+							<Input size="large" />
 						</Form.Item>
 
 						<Row gutter={16}>
 							<Col span={12}>
 								<Form.Item
-								name="originalPrice"
-								label="Giá gốc"
-								labelCol={{span:24}}
-								rules={[{ required: true, message: 'Gía sản phẩm' }]}
+									name="originalPrice"
+									label="Giá gốc"
+									labelCol={{ span: 24 }}
+									rules={[{ required: true, message: 'Gía sản phẩm' }]}
 								>
-									<InputNumber style={{width: '100%'}} size="large"/>
+									<InputNumber style={{ width: '100%' }} size="large" />
 								</Form.Item>
 							</Col>
 							<Col span={12}>
 								<Form.Item
-								name="saleOffPrice"
-								label="Giá giảm"
-								labelCol={{span:24}}
-								rules={[{ required: true, message: 'Gía sản phẩm' }]}
+									name="saleOffPrice"
+									label="Giá giảm"
+									labelCol={{ span: 24 }}
+									rules={[{ required: true, message: 'Gía sản phẩm' }]}
 								>
-									<InputNumber style={{width: '100%'}} size="large"/>
+									<InputNumber style={{ width: '100%' }} size="large" />
 								</Form.Item>
 							</Col>
-							{/* <Col span={12}>
+							<Col span={12}>
 								<Form.Item
-								name="saleOffPrice"
-								rules={[{ required: true, message: 'Gía sản phẩm' }]}
+									label="Phân loại"
+									name="categories"
+									rules={[{ required: true }]}
 								>
-									<Label>Gía giảm</Label>
-									<Select defaultValue="lucy" style={{ width: 120 }} onChange={handleChange}>
-										<Option value="jack">Jack</Option>
-										<Option value="lucy">Lucy</Option>
-										<Option value="disabled" disabled>
-											Disabled
+									<Select style={{ width: '100%' }} size="large">
+										<Option value="phone">Điện thoại</Option>
+										<Option value="laptop">Laptop</Option>
+										<Option value="accessories" disabled>
+											Phụ kiện
 										</Option>
-										<Option value="Yiminghe">yiminghe</Option>
+										<Option value="tablet">Máy tính bảng</Option>
 									</Select>
 								</Form.Item>
-							</Col> */}
+							</Col>
 						</Row>
 
 						<Form.Item
 							name="feature"
-							labelCol={{span:24}}
+							labelCol={{ span: 24 }}
 							label="Đặc điểm nổi bật"
 							rules={[{ required: true, message: 'Đặc điểm sản phẩm' }]}
 						>
-							<TextArea name="feature"/>
+							<TextArea name="feature" />
 						</Form.Item>
 						<Form.Item
 							name="description"
-							labelCol={{span:24}}
+							labelCol={{ span: 24 }}
 							label="Mô tả sản phẩm"
 							rules={[{ required: true, message: 'Mô tả sản phẩm' }]}
 						>
-							<TextArea  name="description"/>
+							<TextArea name="description" />
 						</Form.Item>
 
 						<Form.Item>
