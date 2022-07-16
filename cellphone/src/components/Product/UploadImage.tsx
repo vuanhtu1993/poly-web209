@@ -6,10 +6,9 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 const {TextArea} = Input
 
 const UploadImage = () => {
-    const [imagePreview, setImagePreview] = React.useState('')
+    const [base64Image, setBase64Image] = React.useState('')
 
     const handleChangeImage = (event: any) => {
-        console.log(event.target.files[0])
         const file = event.target.files[0]
         previewFile(file)
     } 
@@ -18,9 +17,11 @@ const UploadImage = () => {
         const reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onloadend = () => {
-            setImagePreview(reader.result)
+            setBase64Image(reader.result)
         }
     }
+
+    console.log(base64Image)
 
     return (
         <Container>
@@ -28,8 +29,8 @@ const UploadImage = () => {
                 <Button type="dashed" shape="circle" icon={<PlusCircleOutlined />} />
                 <Typography.Title level={5}>Thêm ảnh</Typography.Title>
                 <input type="file" name="image" onChange={handleChangeImage}/>
-                {imagePreview && (
-                    <img src={imagePreview} alt="Image" />
+                {base64Image && (
+                    <img src={base64Image} alt="Image" />
                 )}
             </UploadWrapper>
             <Label>Mô tả ngắn</Label>
