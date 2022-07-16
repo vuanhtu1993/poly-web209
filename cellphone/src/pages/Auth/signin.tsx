@@ -14,10 +14,11 @@ const SigninPage: React.FC = () => {
 	};
 
 	const onGenderChange = (value: string) => {
-		console.log(value)
+		const name = form.getFieldValue("name")
+		console.log(name)
 		switch (value) {
 		  case 'male':
-		    form.setFieldsValue({ note: 'Hi, man!' });
+		    form.setFieldsValue({name: "abc"});
 		    return;
 		  case 'female':
 		    form.setFieldsValue({ note: 'Hi, lady!' });

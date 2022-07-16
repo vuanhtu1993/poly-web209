@@ -40,6 +40,24 @@
       "feature": "Apple Watch Series 3 GPS Sport Band (Viền Nhôm, Dây Cao Su)",
       "description": "Apple Watch Series 3 GPS Sport Band (Viền Nhôm, Dây Cao Su)",
       "id": 5
+    },
+    {
+      "name": "Điện Thoại OPPO RENO7 4G",
+      "originalPrice": 7490000,
+      "saleOffPrice": 7490000,
+      "categories": "phone",
+      "feature": "Thông số kỹ thuật:\n\nMàn hình: AMOLED, 6.4\", Full HD+\n\nHệ điều hành: Android 11",
+      "description": "Bộ xử lý: Qualcomm Snapdragon 680, tối đa 2.4GHz\n\nGPU: Adreno 610\n\nRAM: 8GB\n\nBộ nhớ/ROM: 128GB\n\nHỗ trợ thẻ nhớ tối đa 1TB\n\nPin:4500mAh (Typ)\n\nSạc: Siêu Sạc nhanh Super VOOC 33W",
+      "id": 6
+    },
+    {
+      "name": "Điện thoại Samsung Galaxy A32 4G 6GB/128GB Đen - Hàng chính hãng",
+      "originalPrice": 6690000,
+      "saleOffPrice": 5390000,
+      "categories": "phone",
+      "feature": "Điện thoại Samsung Galaxy A32 4G 6GB/128GB Đen sở hữu thiết kế bo góc thanh lịch với độ mỏng chỉ 8.4mm mang đến cảm giác thoải mái khi cầm nắm. Cụm Camera mang thiết kế đặc trưng của dòng Samsung Galaxy A, mặt lưng bóng bẩy giúp điện thoại nổi bật dưới mọi góc nhìn. Sở hữu màn hình Full HD 6.4'', Bộ vi xử lý MediaTek Helio G80 8 nhân mạnh mẽ, cùng bộ 4 camera sắc nét, Galaxy A32 là một đối thủ đáng gờm trong phân khúc  tầm trung.",
+      "description": "Điện thoại Samsung Galaxy A32 4G 6GB/128GB Đen trang bị màn hình giọt nước Infinity-U với viền mỏng mang đến không gian hiển thị rộng rãi, sắc nét và chi tiết. Kích thước màn hình lớn , độ phân giải Full HD (1080 x 2400 pixels) cho chất lượng hình ảnh hiển thị rõ nét. Công nghệ Eye Comfort Shield giảm thiểu ánh sáng xanh gây hại cho mắt, trong khi đó công nghệ Real Smooth mang đến trải nghiệm mượt mà tối ưu, bất kể bạn chơi game hay lướt web.",
+      "id": 7
     }
   ]
 }

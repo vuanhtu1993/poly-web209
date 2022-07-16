@@ -4,6 +4,7 @@ import { Typography, Col, Row, Button, Checkbox, Form, Input, InputNumber, Selec
 import UploadImage from "../../../components/Product/UploadImage";
 import { createProduct } from "../../../api/product";
 import { useNavigate } from "react-router-dom";
+import UploadTest from "../../../components/Product/UploadTest";
 
 const { TextArea } = Input
 const { Option } = Select;
@@ -35,6 +36,7 @@ const AddProductPage: React.FC = () => {
 			<Row gutter={16}>
 				<Col span={10}>
 					<UploadImage />
+					{/* <UploadTest/> */}
 				</Col>
 				<Col span={14}>
 					<Typography.Title level={5}>Thông tin sản phẩm</Typography.Title>

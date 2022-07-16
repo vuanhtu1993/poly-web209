@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { Typography, Button, Table } from 'antd';
 import { Link } from 'react-router-dom'
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
-const { Paragraph } = Typography
 import type { ColumnsType } from 'antd/es/table';
 import { getAll } from "../../../api/product";
+import { useQuery } from 'react-query'
+const { Paragraph } = Typography
 
 interface DataType {
     name: string;
@@ -43,18 +44,21 @@ const columns: ColumnsType<DataType> = [
 
 const ProductAdminPage = () => {
     const [dataTable, setDataTable] = useState([])
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getAll()
-                setDataTable(data.data)
-            } catch (err) {
+    // const [isLoading, setIsLoading] = useState(false)
 
-            }
-        }
+    const fetchData =  async () => {
+        const data = await getAll()
+        console.log(data)
+        setDataTable(data.data)
+    }
+
+    // fetchData()
+    useEffect(() => {        
         
-        fetchData()
     }, [])
+
+    const {isLoading, data, error} = useQuery("Products", getAll)
+
     return (
         <>
             <Breadcrumb>
@@ -65,7 +69,7 @@ const ProductAdminPage = () => {
                     <Button type="dashed" shape="circle" icon={<PlusOutlined />} />
                 </Link>
             </Breadcrumb>
-            <Table columns={columns} dataSource={dataTable} />
+            <Table loading={isLoading} columns={columns} dataSource={data?.data} />
         </>
     )
 }
