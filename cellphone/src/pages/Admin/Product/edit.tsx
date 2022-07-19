@@ -4,32 +4,35 @@ import { upload } from '../../../api/images';
 
 const EditProduct: React.FC = () => {
   const [previewImage, setPreviewImage] = useState('')
-  const handleChangeImage = (e: any) => {
-    console.log(e.target.files)
-    const file = e.target.files[0]
+  const [imageUrl, setImageUrl] = useState('')
+
+  const handleChangeImage = (event: any) => {
+    const file = event.target.files[0]
+    console.log(file);
+    
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onloadend = () => {
-      uploadImage(reader.result)
+      setPreviewImage(reader.result)
     }
   }
 
   const uploadImage = async (base64Image: string) => {
     try {
-      const data = await upload(base64Image)
-      console.log(data)    
+      const res = await upload(base64Image)
+      const data = res.data
+      setImageUrl(data.url)
     } catch(err) {
-      console.log(err)
-      message.error("upload image fail")
+      console.log(err);
+      message.error(JSON.stringify(err.message))
     }
-    
   }
   return (
     <>
-      <input
-        type="file"
-        accept='image/png, image/jpg, image/jpeg' onChange={handleChangeImage} />
-      <img src={previewImage} alt="" />
+      <h1>Cập nhật sản phẩm</h1>
+      <input onChange={handleChangeImage} type="file" accept='image/png, image/jpg, image/jpeg ' />
+      <button onClick={() => uploadImage(previewImage)}>Upload image</button>
+      {imageUrl && <img src={imageUrl} alt="" />}
     </>
   );
 };
