@@ -1,6 +1,8 @@
 import { message } from 'antd';
 import React, { useState } from 'react';
+import useSWR from 'swr'
 import { upload } from '../../../api/images';
+import { getAll } from '../../../api/product';
 
 const EditProduct: React.FC = () => {
   const [previewImage, setPreviewImage] = useState('')
@@ -27,6 +29,13 @@ const EditProduct: React.FC = () => {
       message.error(JSON.stringify(err.message))
     }
   }
+
+  const fetcher = (rest) => {
+    console.log(rest)
+  }
+
+  const {data, error} = useSWR('/products', fetcher) 
+  console.log(data)
   return (
     <>
       <h1>Cập nhật sản phẩm</h1>
