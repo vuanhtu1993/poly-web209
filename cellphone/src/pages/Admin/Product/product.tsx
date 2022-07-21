@@ -1,11 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Typography, Button, Table } from 'antd';
+import { Typography, Button, Table, Switch, message } from 'antd';
 import { Link } from 'react-router-dom'
-import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
+import { SearchOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
-import { getAll } from "../../../api/product";
-import { useQuery } from 'react-query'
+import { getAll, updateProduct } from "../../../api/product";
+import useProduct from "../../../hooks/useProduct";
+import {mutate} from 'swr'
+import {currency} from '../../../ultilities'
+
+
 const { Paragraph } = Typography
 
 interface DataType {
@@ -15,29 +19,40 @@ interface DataType {
     description: string;
 }
 
-const columns: ColumnsType<DataType> = [
+const columns = ({ handleDelelePrduct }): ColumnsType<DataType> => [
     {
         title: 'Tên sản phẩm',
         dataIndex: 'name',
         key: 'name',
+        width: '30%',
         render: text => <a>{text}</a>,
     },
     {
         title: 'Đặc điểm',
         dataIndex: 'feature',
         key: 'feature',
-        render: text => <a>{text}</a>,
+        width: '30%',
     },
     {
         title: 'Giá khuyến mãi',
         dataIndex: 'saleOffPrice',
         key: 'saleOffPrice',
+        width: '20%',
+        render: (_) => currency(_)
     },
     {
-        title: 'Mô tả',
-        dataIndex: 'description',
-        key: 'description',
+        title: "Ẩn/hiện",
+        dataIndex: 'isDelete',
+        key: 'isDelete',
+        width: '10%',
+        render: (_, record) => <Switch checked={_} onChange={(isDelete) => handleDelelePrduct(isDelete, record)} />
     },
+    {
+        title: "Thao tác",
+        key: 'action',
+        width: '10%',
+        render: (_, record) => <EditOutlined style={{ fontSize: '20px', color: '#08c' }} />
+    }
 ];
 
 
@@ -46,18 +61,27 @@ const ProductAdminPage = () => {
     const [dataTable, setDataTable] = useState([])
     // const [isLoading, setIsLoading] = useState(false)
 
-    const fetchData =  async () => {
-        const data = await getAll()
-        console.log(data)
-        setDataTable(data.data)
+    const fetchData = async () => {
+        const res = await getAll()
+        setDataTable(res.data)
     }
 
     // fetchData()
-    useEffect(() => {        
-        
+    useEffect(() => {
+
     }, [])
 
-    const {isLoading, data, error} = useQuery("Products", getAll)
+    const { data, isLoading, isError } = useProduct()
+
+    const handleDelelePrduct = async (isDelete: boolean, record: any) => {
+        const { id } = record
+        record.isDelete = isDelete
+        const res = await updateProduct(id, record)
+        mutate('/products')
+        message.success("Cập nhật thành công")
+    }
+
+    console.log("-------reRender---------")
 
     return (
         <>
@@ -69,7 +93,7 @@ const ProductAdminPage = () => {
                     <Button type="dashed" shape="circle" icon={<PlusOutlined />} />
                 </Link>
             </Breadcrumb>
-            <Table loading={isLoading} columns={columns} dataSource={data?.data} />
+            <Table loading={isLoading} columns={columns({ handleDelelePrduct })} dataSource={data?.data} rowKey="id" />
         </>
     )
 }

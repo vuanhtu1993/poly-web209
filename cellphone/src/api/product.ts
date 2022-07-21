@@ -1,5 +1,5 @@
+import { AxiosError } from "axios";
 import instance from "./instance";
-
 
 export const getAll = () => {
     const url = "/products"
@@ -9,4 +9,9 @@ export const getAll = () => {
 export const createProduct = (data:any) => {
     const url = "/products"
     return instance.post(url, data)
+}
+
+export const updateProduct = (id:number, data:any) => {
+    const url = "/products/" + id
+    return instance.put(url, data)
 }
