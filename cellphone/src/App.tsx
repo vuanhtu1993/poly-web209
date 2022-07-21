@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, {useState} from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {Routes, Route} from 'react-router-dom'
@@ -12,10 +12,16 @@ import DetailPage from './pages/Home/Detail'
 import EditProduct from './pages/Admin/Product/edit'
 import SigninPage from './pages/Auth/signin'
 
+export const ThemeContext = React.createContext({
+  theme: "light",
+  setTheme: () => {}
+});
+
 function App(props: any) {
-  const [count, setCount] = useState(0)
+  const [theme, setTheme] = useState("light")
+  const value = {theme, setTheme}
   return (
-    <div className="App">
+    <ThemeContext.Provider value={value}>
       <Routes>
         {/* Auth */}
         <Route path='/signin' element={<SigninPage/>}/>
@@ -32,7 +38,7 @@ function App(props: any) {
           <Route path='categories' element={<CategoriesPage/>}/>
         </Route>
       </Routes>
-    </div>
+    </ThemeContext.Provider>
   )
 }
 

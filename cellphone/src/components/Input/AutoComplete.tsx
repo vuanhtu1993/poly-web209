@@ -15,7 +15,7 @@ const AutoComplete: React.FC = () => (
         dropdownClassName="certain-category-search-dropdown"
         dropdownMatchSelectWidth={500}
         options={options}
-        style={{width: 500}}
+        style={{width: 700}}
     >
         <WrapperInput size="large" placeholder="large size" prefix={<SearchOutlined />} />
     </AutuCompleteAnt>
@@ -24,7 +24,6 @@ const AutoComplete: React.FC = () => (
 const WrapperInput = styled(Input)`
     border: none;
     border-radius: 10px;
-    width: 500px;
 `
 
 export default AutoComplete;

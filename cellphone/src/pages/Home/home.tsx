@@ -12,7 +12,6 @@ import Banner6 from "../../assets/images/banner6.png";
 
 const HomePage = () => {
 	const onChange = (currentSlide: number) => {
-    console.log(currentSlide);
   };
 	return (
 		<>
