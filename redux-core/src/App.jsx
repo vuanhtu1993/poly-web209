@@ -20,7 +20,11 @@ export default function App() {
   }, []);
 
   if(product.length < 1) {
-    return <Spin/>
+    return (
+      <div className="container">
+        <Spin/>
+      </div>
+    )
   }
 
   return (

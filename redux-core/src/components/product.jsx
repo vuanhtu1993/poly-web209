@@ -20,7 +20,7 @@ const Product = ({ product }) => {
         {product?.map((item) => (
           <Col span={8} key={item.id}>
             <Title level={5}>{item.name}</Title>
-            <img width="100%" src={item.image} />
+            <img width="50%" src={item.image} />
             <div>{currency(item.saleOffPrice)}</div>
             <Button onClick={() => addToCart(item)} type="primary" danger icon={<ShoppingCartOutlined />} />
           </Col>
