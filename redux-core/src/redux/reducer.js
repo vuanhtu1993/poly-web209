@@ -1,10 +1,16 @@
 const intialValue = {
     cart: [],
-    total: 0
+    total: 0,
+    products: []
   };
   
   const rootReducer = (state = intialValue, action) => {
     switch (action.type) {
+      case "product/get":
+        return {
+          ...state,
+          products: action.payload
+        }
       case "cart/add":
         return {
           ...state,
