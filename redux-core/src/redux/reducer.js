@@ -18,25 +18,19 @@ const intialValue = {
           total: [...state.cart, action.payload].reduce((accu, item) => item.total ? accu + item.total : accu + item.saleOffPrice, 0)
         };
       case "cart/increase":
-        const id = action.payload
-        const cartList = state.cart.filter(item => item.id !== id)
-        const newItem = state.cart.find(item => item.id === id)
-        if(newItem.amount) {
-          newItem.amount = newItem.amount + 1
-          newItem.total = newItem.amount * newItem.saleOffPrice
-        } else {
-          newItem.amount = 2
-          newItem.total = newItem.saleOffPrice * 2
-        }
-        const newCartList = [...cartList, newItem]
-        const newTotal = newCartList.reduce((accu, item) => item.total ? accu + item.total : accu + item.saleOffPrice, 0)
+        //refactor
+        const cartList = state.cart.map(item => {
+          if (item.id === action.payload) {
+            const amount = item.amount ? item.amount + 1 : 2
+            return {...item, amount: amount, total: amount ? amount * item.saleOffPrice : item.saleOffPrice * 2}
+          }
+        })
         return {
           ...state,
           cart: [
-            ...cartList,
-            newItem
+            ...cartList
           ],
-          total: newTotal
+          total: cartList.reduce((accu, item) => item.total ? accu + item.total : accu + item.saleOffPrice, 0)
         }
       default:
         return state;
