@@ -2,8 +2,7 @@ import React from "react"
 import { useSelector } from "react-redux"
 
 const Cart = () => {
-  const {cart, total} = useSelector(store => store)
-  console.log(cart)
+  const {cart, products, total} = useSelector(store => store)
   return (
     <div className='cart-container'>
       <h3>Cart</h3>
@@ -16,7 +15,7 @@ const Cart = () => {
       ))}
       <div className="total">
         <div>Total</div>
-        <h2>{total}</h2>
+        <h2>{0}</h2>
       </div>
     </div>
   )

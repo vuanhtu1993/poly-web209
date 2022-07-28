@@ -3,10 +3,10 @@ import { useDispatch } from "react-redux"
 
 const Product = ({ product }) => {
   const dispatch = useDispatch()
-  const addToCart = (item) => {
+  const addToCart = (product) => {
     dispatch({
       type: "cart/add",
-      payload: item
+      payload: product
     })
   }
   return (
