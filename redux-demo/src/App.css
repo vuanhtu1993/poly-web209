@@ -57,6 +57,11 @@
 
 .cart-item {
   display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.cart-item p {
+  font-weight: bold;
 }
 
 .total {

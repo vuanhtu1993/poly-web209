@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch } from "react-redux"
+import {currency} from "../helper.js";
 
 const Product = ({ product }) => {
   const dispatch = useDispatch()
@@ -15,7 +16,7 @@ const Product = ({ product }) => {
       {product?.map(item => (
         <div className="product-item" onClick={() => addToCart(item)}>
           <h4>{item.name}</h4>
-          <div>{item.saleOffPrice}</div>
+          <div>{currency(item.saleOffPrice)}</div>
           <img style={{ width: "50%" }} src={item.image} />
         </div>
       ))}
