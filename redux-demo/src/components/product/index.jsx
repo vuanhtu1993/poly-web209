@@ -1,6 +1,6 @@
 import React from "react"
 import { useDispatch } from "react-redux"
-import {currency} from "../helper.js";
+import {currency} from "../../helper.js";
 
 const Product = ({ product }) => {
   const dispatch = useDispatch()
