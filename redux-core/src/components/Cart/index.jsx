@@ -1,25 +1,21 @@
 import React from "react";
 import { Col, Divider, Row, Typography, Button, InputNumber } from 'antd'
 import { useDispatch, useSelector } from "react-redux";
-import { currency } from "../helper";
+import { currency } from "../../helper.js";
+import cartSlice from "./cartSlice.js";
 
 const { Title } = Typography
 
-const Cart = () => {
-    const store = useSelector(store => store)
+const Index = () => {
+    const {cart} = useSelector(store => store)
     const dispatch = useDispatch()
-    console.log("Cart------", store)
     const increaseProduct = (id) => {
-        console.log("Increase", id)
-        dispatch({
-            type: "cart/increase",
-            payload: id
-        })
+        dispatch(cartSlice.actions.increase(id))
     }
     return (
         <div className="cart">
             <Title level={3}>Giỏ hàng</Title>
-            {store.cart?.map(item => (
+            {cart.cart?.map(item => (
                 <Row key={item.id}>
                     <Col span={20}>
                         <Title level={5}>{item.name}</Title>
@@ -46,10 +42,10 @@ const Cart = () => {
             <Divider />
             <Row>
                 <Col span={20}>Tổng số tiền</Col>
-                <Col span={4}><Title level={3} style={{color: "red"}}>{currency(store.total)}</Title></Col>
+                <Col span={4}><Title level={3} style={{color: "red"}}>{currency(cart.total)}</Title></Col>
             </Row>
         </div>
     )
 }
 
-export default Cart
+export default Index

@@ -1,7 +1,20 @@
-import { createStore, applyMiddleware } from "redux";
-import thunk from 'redux-thunk'
-import rootReducer from "./reducer";
+// import { createStore, applyMiddleware } from "redux";
+// import thunk from 'redux-thunk'
+// import rootReducer from "./reducer";
+//
+// const store = createStore(rootReducer, applyMiddleware(thunk));
+//
+// export default store;
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+import {configureStore} from '@reduxjs/toolkit'
+import cartSlice from "../components/Cart/cartSlice.js";
+import productSlice from "../components/Product/productSlice.js";
 
-export default store;
+const store = configureStore({
+  reducer: {
+    product: productSlice.reducer,
+    cart: cartSlice.reducer,
+  }
+})
+
+export default store

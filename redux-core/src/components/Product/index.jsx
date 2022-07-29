@@ -1,17 +1,15 @@
 import { Typography, Row, Col, Button } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { currency } from "../helper";
+import { currency } from "../../helper.js";
 import { useDispatch } from "react-redux";
+import cartSlice from "../Cart/cartSlice.js";
 
 const { Title } = Typography;
 
-const Product = ({ product }) => {
+const Index = ({ product }) => {
   const dispatch = useDispatch();
   const addToCart = (product) => {
-    dispatch({
-      type: "cart/add",
-      payload: product
-    })
+    dispatch(cartSlice.actions.add(product))
   }
   return (
     <div className="product">
@@ -30,4 +28,4 @@ const Product = ({ product }) => {
   );
 };
 
-export default Product;
+export default Index;

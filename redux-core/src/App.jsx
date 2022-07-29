@@ -1,20 +1,21 @@
 import { Spin} from "antd";
 import { useEffect, useState } from "react";
-import Product from "./components/product";
+import Product from "./components/Product";
 import { useDispatch, useSelector } from "react-redux";
-import Cart from "./components/cart";
+import Cart from "./components/Cart";
 import { GETPRODUCTS } from "./redux/actions";
 import "./App.css";
+import productSlice, {fetchProduct} from "./components/Product/productSlice.js";
 
 export default function App() {
   const dispatch = useDispatch()
-  const {products} = useSelector(store => store)
-
+  const {product} = useSelector(store => store)
   useEffect(() => {
-    dispatch(GETPRODUCTS)
+    // fetchData()
+    dispatch(fetchProduct())
   }, []);
 
-  if(products.length < 1) {
+  if(product.length < 1) {
     return (
       <div className="container">
         <Spin/>
@@ -24,7 +25,7 @@ export default function App() {
 
   return (
     <div className="container">
-      <Product product={products} />
+      <Product product={product} />
       <Cart/>
     </div>
   );
