@@ -6,6 +6,11 @@ const initialValue = {
 
 const rootReducer = (state = initialValue, action) => {
 	switch (action.type) {
+		case "product/get":
+			return {
+				...state,
+				products: action.payload
+			}
 		case "cart/add":
 			return {
 				...state,

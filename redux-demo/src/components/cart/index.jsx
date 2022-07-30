@@ -14,7 +14,7 @@ const Cart = () => {
   return (
     <div className='cart-container'>
       <h3>Cart</h3>
-      {cart.cart?.map(item => (
+      {cart?.map(item => (
         <div className="cart-item">
           <div style={{display: "flex"}}>
             <h4>{item.name}</h4>

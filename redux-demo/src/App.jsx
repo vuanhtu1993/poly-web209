@@ -3,19 +3,19 @@ import reactLogo from './assets/react.svg'
 import './App.css'
 import Product from './components/product'
 import Cart from './components/cart'
+import { useDispatch, useSelector } from 'react-redux'
+import { GETPRODUCT } from './redux/actions'
 
 function App() {
-  const [products, setProducts] = useState([])
-  const fetchProduct = async function() {
-    const data = await(await fetch('https://62de615accdf9f7ec2d66ae3.mockapi.io/api/products')).json()
-    setProducts(data)
-  }
+  const store = useSelector(store => store)
+  console.log(store);
+  const dispatch = useDispatch()
   useEffect(() => {
-    fetchProduct()
+    dispatch(GETPRODUCT)
   }, [])
   return (
     <div>
-      <Product product={products}/>
+      <Product product={store.products}/>
       <Cart/>
     </div>
   )
