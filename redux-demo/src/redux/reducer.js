@@ -21,6 +21,7 @@ const rootReducer = (state = initialValue, action) => {
 			const newCart = state.cart.map(item => {
 				if (item.id === id) {
 					const amount = item.amount ? item.amount + 1 : 2;
+					// Immutable
 					return {
 						...item,
 						amount: amount,

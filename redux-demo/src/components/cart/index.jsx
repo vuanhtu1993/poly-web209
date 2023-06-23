@@ -4,9 +4,8 @@ import {currency} from "../../helper.js";
 import cartSlice from "./cartSlice.js";
 
 const Cart = () => {
-  const {cart} = useSelector(store => store)
+  const {cart} = useSelector(store => store.cart)
   const dispatch = useDispatch()
-
   const increase = (id) => {
     dispatch(cartSlice.actions.increase(id))
   }

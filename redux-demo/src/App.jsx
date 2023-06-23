@@ -7,15 +7,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { GETPRODUCT } from './redux/actions'
 
 function App() {
+  const [product, setProduct] = useState([])
   const store = useSelector(store => store)
-  console.log(store);
-  const dispatch = useDispatch()
+  const fetchData = async () => {
+    const data = await(await fetch('https://62de615accdf9f7ec2d66ae3.mockapi.io/api/products')).json()
+    setProduct(data)
+  }
   useEffect(() => {
-    dispatch(GETPRODUCT)
+    fetchData()
   }, [])
   return (
     <div>
-      <Product product={store.products}/>
+      <Product product={product}/>
       <Cart/>
     </div>
   )
