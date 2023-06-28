@@ -1,20 +1,14 @@
-import FilmCard from "./components/filmCard"
-import data from '../db'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import HomePage from './pages/home'
+import FilmPage from './pages/film'
+
+const routers = createBrowserRouter([
+  { path: '/', element: <HomePage /> },
+  { path: '/product/:id', element: <FilmPage /> },
+])
 
 function App() {
-  return <div>
-    <header className="flex">
-      <img className="w-[80px]" src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png" alt="" />
-    </header>
-    <div className="content pt-4 grid grid-cols-3 gap-4">
-      {data.map(film => <FilmCard
-        key={film.title}
-        title={film.title}
-        year={film.year}
-        thumbnail={film.thumbnail}
-      />)}
-    </div>
-  </div>
+  return <RouterProvider router={routers} />
 }
 
 export default App
