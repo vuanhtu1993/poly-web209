@@ -20,17 +20,33 @@ const app = document.querySelector('#app')
 // app.appendChild(switchBtn)
 
 // Declarative
-let _status = false //State
+// let _status = false //State
 
-const render = function () {
-    app.innerHTML = `
-        <img style="max-width: 80px" src="${_status ? "./images/on.png" : "./images/off.png"}"/>
-        <button>Switch</button>
-    `
-    document.querySelector("button").onclick = function () {
-        _status = !_status
-        render()
-    }
+// const render = function () {
+//     app.innerHTML = `
+//         <img style="max-width: 80px" src="${_status ? "./images/on.png" : "./images/off.png"}"/>
+//         <button>Switch</button>
+//     `
+//     document.querySelector("button").onclick = function () {
+//         _status = !_status
+//         render()
+//     }
+// }
+
+// render()
+
+// React
+
+// component
+const App = function () {
+    const [status, setStatus] = React.useState(false)
+    // JSX
+    return <div>
+        <img style={{ maxWidth: 80 }} src={status ? "./images/on.png" : "./images/off.png"} />
+        <button onClick={() => setStatus(!status)}>Switch</button>
+    </div>
+    // 
 }
 
-render()
+const root = ReactDOM.createRoot(app)
+root.render(<App />)
