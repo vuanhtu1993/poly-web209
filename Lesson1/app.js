@@ -21,17 +21,30 @@ const app = document.querySelector('#app')
 
 
 // Declarative
-let state = true
+// let state = true
 
-const render = () => {
-    app.innerHTML = `
-        <img style="max-width: 80px" src="${state ? "./images/on.png" : "./images/off.png"}"/>
-        <button>Switch</button>
-    `
-    document.querySelector("button").onclick = function () {
-        state = !state
-        render()
-    }
+// const render = () => {
+//     app.innerHTML = `
+//         <img style="max-width: 80px" src="${state ? "./images/on.png" : "./images/off.png"}"/>
+//         <button>Switch</button>
+//     `
+//     document.querySelector("button").onclick = function () {
+//         state = !state
+//         render()
+//     }
+// }
+
+// render()
+
+// React
+const App = function () {
+    const [status, setStatus] = React.useState(false)
+    // JSX => JS * HTML
+    return <div>
+        <img style={{ maxWidth: 80 }} src={status ? "./images/on.png" : "./images/off.png"} />
+        <button onClick={() => setStatus(!status)}>Switch</button>
+    </div>
 }
 
-render()
+const root = ReactDOM.createRoot(app)
+root.render(<App />)
