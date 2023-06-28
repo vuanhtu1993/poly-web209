@@ -1,10 +1,19 @@
-function App() {
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import ClientLayout from "./components/layout/client"
+import HomePage from "./pages/homePage"
+import FilmPage from "./pages/filmPage"
 
-  return (
-    <>
-      <h1 className="bg-slate-400">Welcome to react app</h1>
-    </>
-  )
+const router = createBrowserRouter([
+  {
+    path: "/", element: <ClientLayout />, children: [
+      { path: "/", element: <HomePage /> },
+      { path: "/film/:id", element: <FilmPage /> }
+    ]
+  }
+])
+
+function App() {
+  return <RouterProvider router={router} />
 }
 
 export default App
