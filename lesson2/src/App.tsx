@@ -3,7 +3,10 @@ import HomePage from './pages/home'
 import FilmPage from './pages/film'
 
 const routers = createBrowserRouter([
-  { path: '/', element: <HomePage /> },
+  {
+    path: '/',
+    element: <HomePage />
+  },
   { path: '/product/:id', element: <FilmPage /> },
 ])
 

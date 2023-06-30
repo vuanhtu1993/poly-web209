@@ -1,22 +1,25 @@
 
-type Film = { title: string, year: number, thumbnail: string }
+type Props = {
+    data: { title: string, year: number, thumbnail: string }
+    children?: React.ReactNode
+}
 
-const FilmCard = function ({ title, year, thumbnail }: Film) {
+const FilmCard = function ({ data }: Props) {
     return <article className="overflow-hidden rounded-lg shadow transition hover:shadow-lg">
         <img
             alt="Office"
-            src={thumbnail}
+            src={data.thumbnail}
             className="h-56 w-full object-cover"
         />
 
         <div className="bg-white p-4 sm:p-6">
             <time className="block text-xs text-gray-500">
-                {year}
+                {data.year}
             </time>
 
             <a href="#">
                 <h3 className="mt-0.5 text-lg text-gray-900">
-                    {title}
+                    {data.title}
                 </h3>
             </a>
 
