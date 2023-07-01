@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react"
 import FilmCard from "./components/filmCard"
 import { IFilm } from "./models"
+import { getAll } from "./api/film"
 
 function App() {
   const [films, setFilms] = useState<IFilm[]>([])
 
   useEffect(() => {
-    fetch('http://localhost:3000/movies')
-      .then(res => res.json())
-      .then(data => {
-        setFilms(data)
-      })
-  })
+    const getFilms = async () => {
+      const data = await getAll()
+      setFilms(data)
+    }
+    getFilms()
+  }, [])
 
   return <div className="container mx-auto">
     <header className="flex">
