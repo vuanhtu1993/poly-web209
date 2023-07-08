@@ -1,13 +1,25 @@
 import { ReactElement, useState } from "react"
+import { createMovie } from "../api/films"
+import Message from "../components/message"
+
 
 const AddFilmPage = function () {
   const [title, setTitle] = useState("")
   const [isValidTitle, setValidTitle] = useState(false)
+  const [extract, setExtract] = useState("")
+  const [isValidExtract, setValidExtract] = useState(false)
+  const [message, setMessage] = useState<{ content: string, type: string } | null>(null)
 
   const handleTitle = (e: React.FormEvent) => {
     const value = (e.target as HTMLInputElement).value
     validateTitle(value)
     setTitle(value)
+  }
+
+  const handleExtract = (e: React.FormEvent) => {
+    const value = (e.target as HTMLInputElement).value
+    validateExtract(value)
+    setExtract(value)
   }
 
   const validateTitle = (title: string) => {
@@ -18,15 +30,38 @@ const AddFilmPage = function () {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateExtract = (title: string) => {
+    if (extract != "" && extract.length > 10) {
+      setValidExtract(true)
+    } else {
+      setValidExtract(false)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!isValidTitle) {
+    if (!isValidTitle || !isValidExtract) {
       alert("Vui lòng kiểm tra lại!!!")
+    } else {
+      try {
+        const data = {
+          title,
+          extract
+        }
+        await createMovie(data);
+        setMessage({
+          content: "Thêm mới thành công 🤟",
+          type: "success"
+        })
+      } catch (err) {
+        alert("Có lỗi xảy ra!!!")
+      }
     }
   }
 
   return <section className="relative flex flex-wrap lg:h-screen lg:items-center">
     <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
+      {message && <Message content={message.content} type={message.type} />}
       <div className="mx-auto max-w-lg text-center">
         <h1 className="text-2xl font-bold sm:text-3xl">Thêm mới</h1>
       </div>
@@ -56,7 +91,9 @@ const AddFilmPage = function () {
               placeholder="Extract"
               cols={6}
               name="extract"
-            ></textarea>
+              onChange={handleExtract}
+            />
+            <div className="text-red-400">{!isValidExtract && "Trường dữ liệu không hợp lệ"}</div>
           </div>
         </div>
 
