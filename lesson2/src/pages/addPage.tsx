@@ -1,6 +1,5 @@
-import { ReactElement, useContext, useReducer, useState } from "react"
+import { useContext, useReducer } from "react"
 import { createMovie } from "../api/films"
-import Message from "../components/message"
 import { AppContext } from "../App"
 
 type AddForm = {
@@ -49,7 +48,6 @@ const validateReducer = (state: ValidateAddForm, action: { type: string, payload
 }
 
 const AddFilmPage = function () {
-  const [contentMessage, setContentMessage] = useState<{ message: string, type: string } | null>(null)
   const [formData, setFormData] = useReducer(formReducer, initialForm)
   const [formValidate, setFormValidate] = useReducer(validateReducer, intialValidateForm)
   const { showMessage } = useContext(AppContext)
