@@ -5,24 +5,24 @@ import Message from "../components/message"
 
 const AddFilmPage = function () {
   const [title, setTitle] = useState("")
-  const [isValidTitle, setValidTitle] = useState(false)
+  const [isValidTitle, setValidTitle] = useState(true)
   const [extract, setExtract] = useState("")
-  const [isValidExtract, setValidExtract] = useState(false)
+  const [isValidExtract, setValidExtract] = useState(true)
   const [contentMessage, setContentMessage] = useState<{ message: string, type: string } | null>(null)
 
   const handleTitle = (e: React.FormEvent) => {
     const value = (e.target as HTMLInputElement).value
-    validateTitle(value)
+    validateTitle()
     setTitle(value)
   }
 
   const handleExtract = (e: React.FormEvent) => {
     const value = (e.target as HTMLInputElement).value
-    validateExtract(value)
+    validateExtract()
     setExtract(value)
   }
 
-  const validateTitle = (title: string) => {
+  const validateTitle = () => {
     if (title != "") {
       setValidTitle(true)
     } else {
@@ -30,7 +30,7 @@ const AddFilmPage = function () {
     }
   }
 
-  const validateExtract = (title: string) => {
+  const validateExtract = () => {
     if (extract != "" && extract.length > 10) {
       setValidExtract(true)
     } else {
@@ -76,6 +76,7 @@ const AddFilmPage = function () {
               className="w-full border rounded-lg border-black p-4 pe-12 text-sm shadow-sm"
               placeholder="Title"
               onChange={handleTitle}
+              onBlur={validateTitle}
               name="title"
             />
           </div>
@@ -92,6 +93,7 @@ const AddFilmPage = function () {
               cols={6}
               name="extract"
               onChange={handleExtract}
+              onBlur={validateExtract}
             />
             <div className="text-red-400">{!isValidExtract && "Trường dữ liệu không hợp lệ"}</div>
           </div>
