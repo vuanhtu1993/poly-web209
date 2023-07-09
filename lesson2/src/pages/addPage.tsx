@@ -1,6 +1,7 @@
-import { ReactElement, useReducer, useState } from "react"
+import { ReactElement, useContext, useReducer, useState } from "react"
 import { createMovie } from "../api/films"
 import Message from "../components/message"
+import { AppContext } from "../App"
 
 type AddForm = {
   title: string,
@@ -51,6 +52,10 @@ const AddFilmPage = function () {
   const [contentMessage, setContentMessage] = useState<{ message: string, type: string } | null>(null)
   const [formData, setFormData] = useReducer(formReducer, initialForm)
   const [formValidate, setFormValidate] = useReducer(validateReducer, intialValidateForm)
+  const { showMessage } = useContext(AppContext)
+
+  // console.log(data);
+
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -60,7 +65,7 @@ const AddFilmPage = function () {
     } else {
       try {
         await createMovie(formData);
-        setContentMessage({
+        showMessage && showMessage({
           message: "Thêm mới thành công 🤟",
           type: "success"
         })
@@ -72,7 +77,6 @@ const AddFilmPage = function () {
 
   return <section className="relative flex flex-wrap lg:h-screen lg:items-center">
     <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
-      {contentMessage && <Message content={contentMessage} />}
       <div className="mx-auto max-w-lg text-center">
         <h1 className="text-2xl font-bold sm:text-3xl">Thêm mới</h1>
       </div>
