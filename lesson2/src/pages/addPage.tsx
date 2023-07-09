@@ -1,54 +1,65 @@
-import { ReactElement, useState } from "react"
+import { ReactElement, useReducer, useState } from "react"
 import { createMovie } from "../api/films"
 import Message from "../components/message"
 
+type AddForm = {
+  title: string,
+  extract: string
+}
+
+const initialForm: AddForm = {
+  title: "",
+  extract: ""
+}
+
+const formReducer = (state: AddForm, action: { type: string, payload: string }) => {
+  switch (action.type) {
+    case "UPDATE_TITLE":
+      return { ...state, title: action.payload }
+    case "UPDATE_EXTRACT":
+      return { ...state, extract: action.payload }
+    default:
+      return state
+  }
+}
+
+type ValidateAddForm = {
+  isValidTitle: boolean,
+  isValidExtract: boolean,
+}
+
+const intialValidateForm = {
+  isValidTitle: true,
+  isValidExtract: true,
+}
+
+const validateReducer = (state: ValidateAddForm, action: { type: string, payload: AddForm }) => {
+  let isValid: boolean
+  switch (action.type) {
+    case "VAlIDATE_TITLE":
+      isValid = action.payload.title.length > 0
+      return { ...state, isValidTitle: isValid }
+    case "VAlIDATE_EXTRACT":
+      isValid = action.payload.extract.length > 10
+      return { ...state, isValidExtract: isValid }
+    default:
+      return state
+  }
+}
 
 const AddFilmPage = function () {
-  const [title, setTitle] = useState("")
-  const [isValidTitle, setValidTitle] = useState(true)
-  const [extract, setExtract] = useState("")
-  const [isValidExtract, setValidExtract] = useState(true)
   const [contentMessage, setContentMessage] = useState<{ message: string, type: string } | null>(null)
+  const [formData, setFormData] = useReducer(formReducer, initialForm)
+  const [formValidate, setFormValidate] = useReducer(validateReducer, intialValidateForm)
 
-  const handleTitle = (e: React.FormEvent) => {
-    const value = (e.target as HTMLInputElement).value
-    validateTitle()
-    setTitle(value)
-  }
-
-  const handleExtract = (e: React.FormEvent) => {
-    const value = (e.target as HTMLInputElement).value
-    validateExtract()
-    setExtract(value)
-  }
-
-  const validateTitle = () => {
-    if (title != "") {
-      setValidTitle(true)
-    } else {
-      setValidTitle(false)
-    }
-  }
-
-  const validateExtract = () => {
-    if (extract != "" && extract.length > 10) {
-      setValidExtract(true)
-    } else {
-      setValidExtract(false)
-    }
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!isValidTitle || !isValidExtract) {
+    if (!formValidate.isValidExtract || !formValidate.isValidTitle) {
       alert("Vui lòng kiểm tra lại!!!")
     } else {
       try {
-        const data = {
-          title,
-          extract
-        }
-        await createMovie(data);
+        await createMovie(formData);
         setContentMessage({
           message: "Thêm mới thành công 🤟",
           type: "success"
@@ -75,12 +86,19 @@ const AddFilmPage = function () {
               type="text"
               className="w-full border rounded-lg border-black p-4 pe-12 text-sm shadow-sm"
               placeholder="Title"
-              onChange={handleTitle}
-              onBlur={validateTitle}
+              value={formData.title}
+              onChange={(e) => setFormData({
+                type: "UPDATE_TITLE",
+                payload: e.target.value
+              })}
+              onBlur={() => setFormValidate({
+                type: "VAlIDATE_TITLE",
+                payload: formData
+              })}
               name="title"
             />
           </div>
-          <div className="text-red-400">{!isValidTitle && "Trường dữ liệu không hợp lệ"}</div>
+          <div className="text-red-400">{!formValidate.isValidTitle && "Trường dữ liệu không hợp lệ"}</div>
         </div>
 
         <div>
@@ -92,10 +110,17 @@ const AddFilmPage = function () {
               placeholder="Extract"
               cols={6}
               name="extract"
-              onChange={handleExtract}
-              onBlur={validateExtract}
+              value={formData.extract}
+              onChange={(e) => setFormData({
+                type: "UPDATE_EXTRACT",
+                payload: e.target.value
+              })}
+              onBlur={() => setFormValidate({
+                type: "VAlIDATE_EXTRACT",
+                payload: formData
+              })}
             />
-            <div className="text-red-400">{!isValidExtract && "Trường dữ liệu không hợp lệ"}</div>
+            <div className="text-red-400">{!formValidate.isValidExtract && "Trường dữ liệu không hợp lệ"}</div>
           </div>
         </div>
 
