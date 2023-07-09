@@ -3,15 +3,17 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components'
 
 type Props = {
-  content: string,
-  type: string,
+  content: {
+    message: string,
+    type: string
+  },
   duration?: number,
   onClose?: () => void
 }
 
 let timer: number
 
-const Message = ({ content, type, duration = 3000, onClose }: Props) => {
+const Message = ({ content, duration = 3000, onClose }: Props) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -26,12 +28,12 @@ const Message = ({ content, type, duration = 3000, onClose }: Props) => {
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [content]);
 
 
   return createPortal(
-    <Content visable={visible} type={type}>
-      {content}
+    <Content visable={visible} type={content.type}>
+      {content.message}
     </Content>,
     document.body
   );

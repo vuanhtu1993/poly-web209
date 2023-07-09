@@ -8,7 +8,7 @@ const AddFilmPage = function () {
   const [isValidTitle, setValidTitle] = useState(false)
   const [extract, setExtract] = useState("")
   const [isValidExtract, setValidExtract] = useState(false)
-  const [message, setMessage] = useState<{ content: string, type: string } | null>(null)
+  const [contentMessage, setContentMessage] = useState<{ message: string, type: string } | null>(null)
 
   const handleTitle = (e: React.FormEvent) => {
     const value = (e.target as HTMLInputElement).value
@@ -49,8 +49,8 @@ const AddFilmPage = function () {
           extract
         }
         await createMovie(data);
-        setMessage({
-          content: "Thêm mới thành công 🤟",
+        setContentMessage({
+          message: "Thêm mới thành công 🤟",
           type: "success"
         })
       } catch (err) {
@@ -61,7 +61,7 @@ const AddFilmPage = function () {
 
   return <section className="relative flex flex-wrap lg:h-screen lg:items-center">
     <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
-      {message && <Message content={message.content} type={message.type} />}
+      {contentMessage && <Message content={contentMessage} />}
       <div className="mx-auto max-w-lg text-center">
         <h1 className="text-2xl font-bold sm:text-3xl">Thêm mới</h1>
       </div>
