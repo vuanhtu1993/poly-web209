@@ -1,30 +1,29 @@
-import { useEffect, useState } from "react"
-import Film from "./components/film"
-import { getAll } from "./api/film"
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom'
+import HomePage from "./pages/home"
+import AddFilmPage from './pages/addFilm'
 
-function App() {
-  const [films, setFilms] = useState([])
-  // useEffect:
-  // 1. Tham số thứ 2 = undefined
-  // 2. Tham số thứ 2 = []
-  // 3. Tham số thứ 2 phụ thuộc vào props hoặc state
-  useEffect(() => {
-    const getFilms = async () => {
-      const data = await getAll()
-      setFilms(data)
-    }
-    getFilms()
-  }, [])
+function UserLayout() {
   return <div>
     <header>
       <img className="w-[80px]" src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png" alt="" />
     </header>
-    <div className="pt-4 grid grid-cols-3 gap-2">
-      {/* Render dynamic - props*/}
-      {films.map((item) => <Film data={item} />)}
-
-    </div>
+    <Outlet />
+    <footer>
+      Footer
+    </footer>
   </div>
+}
+
+const App = () => {
+  const router = createBrowserRouter([
+    {
+      path: "/", element: <UserLayout />, children: [
+        { path: "/", element: <HomePage /> },
+        { path: "/add", element: <AddFilmPage /> },
+      ]
+    },
+  ])
+  return <RouterProvider router={router} />
 }
 
 export default App
