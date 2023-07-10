@@ -1,17 +1,33 @@
-import { useState } from "react"
+import { useReducer, useState } from "react"
+
+type FormDataType = {
+    title: string,
+    extract: string
+}
+
+const intialFormData = {
+    title: "",
+    extract: ""
+}
+
+const formDataReducer = function (state: FormDataType, action: { type: string, payload: string }) {
+    switch (action.type) {
+        case "UPDATE_TITLE":
+            return { ...state, title: action.payload }
+        case "UPDATE_EXTRACT":
+            return { ...state, extract: action.payload }
+        default:
+            return state
+    }
+}
 
 const AddFilmPage = function () {
-    const [title, setTitle] = useState("")
+    const [formData, dispatchFormData] = useReducer(formDataReducer, intialFormData)
     const [isValidTitle, setValidTitle] = useState(true)
 
-    const [extract, setExtract] = useState("")
     const [isValidExtract, setValidExtract] = useState(true)
 
-    const handleTitle = (e: React.FormEvent) => {
-        const value = (e.target as HTMLInputElement).value
-        setTitle(value)
-        validateTitle(value)
-    }
+
     const validateTitle = (str: string) => {
         if (str.length > 3) {
             setValidTitle(true)
@@ -20,11 +36,7 @@ const AddFilmPage = function () {
         }
     }
 
-    const handleExtract = (e: React.FormEvent) => {
-        const value = (e.target as HTMLInputElement).value
-        setExtract(value)
-        validateExtract(value)
-    }
+
     const validateExtract = (str: string) => {
         if (str.length > 10) {
             setValidExtract(true)
@@ -33,20 +45,20 @@ const AddFilmPage = function () {
         }
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (isValidExtract && isValidTitle) {
-            const data = {
-                title,
-                extract
-            }
-            console.log(data);
-            alert("Thêm mới thành công!");
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //     e.preventDefault()
+    //     if (isValidExtract && isValidTitle) {
+    //         const data = {
+    //             title,
+    //             extract
+    //         }
+    //         console.log(data);
+    //         alert("Thêm mới thành công!");
 
-        } else {
-            alert("Yêu cầu kiểm tra lại")
-        }
-    }
+    //     } else {
+    //         alert("Yêu cầu kiểm tra lại")
+    //     }
+    // }
 
 
     return <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
@@ -56,7 +68,6 @@ const AddFilmPage = function () {
             </h1>
 
             <form
-                onSubmit={handleSubmit}
                 action=""
                 className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
             >
@@ -69,8 +80,11 @@ const AddFilmPage = function () {
                             type="text"
                             className="w-full rounded-lg border border-black p-4 pe-12 text-sm shadow-sm"
                             placeholder="Enter Title"
-                            onChange={handleTitle}
-                            onBlur={() => validateTitle(title)}
+                            onChange={(e) => dispatchFormData({
+                                type: "UPDATE_TITLE",
+                                payload: e.target.value
+                            })}
+                        // onBlur={() => validateTitle(title)}
                         />
                         <div className="text-red-500">{!isValidTitle ? "Trường dữ liệu không hợp lệ" : ""}</div>
                     </div>
@@ -83,8 +97,10 @@ const AddFilmPage = function () {
                         <textarea
                             className="w-full rounded-lg border border-black p-4 pe-12 text-sm shadow-sm"
                             placeholder="Enter Extract"
-                            onChange={handleExtract}
-                            onBlur={() => validateExtract(extract)}
+                            onChange={(e) => dispatchFormData({
+                                type: "UPDATE_EXTRACT",
+                                payload: e.target.value
+                            })}
                         />
                         <div className="text-red-500">{!isValidExtract ? "Trường dữ liệu không hợp lệ" : ""}</div>
                     </div>
