@@ -1,6 +1,7 @@
-import { useReducer, useState } from "react"
+import { useContext, useReducer, useState } from "react"
 import { createFilm } from "../api/film"
 import Message from "../components/message"
+import { GlobalContext } from "../App"
 
 type FormDataType = {
     title: string,
@@ -50,21 +51,31 @@ const formValidReducer = function (state: FormValidType, action: { type: string,
 const AddFilmPage = function () {
     const [formData, dispatchFormData] = useReducer(formDataReducer, intialFormData)
     const [formValid, dispatchFormValid] = useReducer(formValidReducer, intialFormValid)
-    const [message, setMessage] = useState<{ type: string, message: string } | null>(null)
+    const globalState = useContext(GlobalContext)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (formValid.isValidExtract && formValid.isValidTitle) {
             try {
                 await createFilm(formData)
-                setMessage({
-                    type: "success",
-                    message: "Thêm mới thành công"
+                globalState.setGlobal({
+                    contentMessage: {
+                        type: "success",
+                        message: "Thêm mới thành công"
+                    }
                 })
             } catch (err) {
-                setMessage({
-                    type: "error",
-                    message: err.message
+                let errorMessage = ""
+                if (typeof err === "string") {
+                    errorMessage = err
+                } else if (err instanceof Error) {
+                    errorMessage = err.message
+                }
+                globalState.setGlobal({
+                    contentMessage: {
+                        type: "error",
+                        message: errorMessage
+                    }
                 })
             }
 
@@ -73,13 +84,13 @@ const AddFilmPage = function () {
         }
     }
 
+    console.log(globalState, "globalState");
 
     return <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">
             <h1 className="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">
                 Thêm mới
             </h1>
-            {message && <Message content={message} />}
 
             <form
                 action=""

@@ -3,6 +3,8 @@ import HomePage from './pages/home'
 import FilmPage from './pages/film'
 import { getAll } from './api/film'
 import AddFilmPage from './pages/addFilm'
+import { createContext, useState } from 'react'
+import Message from './components/message'
 
 const routers = createBrowserRouter([
   {
@@ -17,8 +19,16 @@ const routers = createBrowserRouter([
   { path: '/film/add', element: <AddFilmPage /> },
 ])
 
+export const GlobalContext = createContext({})
+
 function App() {
-  return <RouterProvider router={routers} />
+  const [global, setGlobal] = useState({
+    contentMessage: null
+  })
+  return <GlobalContext.Provider value={{ global, setGlobal }}>
+    {global.contentMessage && <Message content={global.contentMessage} />}
+    <RouterProvider router={routers} />
+  </GlobalContext.Provider>
 }
 
 export default App
