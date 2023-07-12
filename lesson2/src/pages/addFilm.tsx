@@ -1,5 +1,6 @@
 import { useReducer, useState } from "react"
 import { createFilm } from "../api/film"
+import Message from "../components/message"
 
 type FormDataType = {
     title: string,
@@ -23,50 +24,57 @@ const reducerFormData = (state: FormDataType, action: { type: string, payload: s
     }
 }
 
+type FormValidType = {
+    isValidTitle: boolean,
+    isValidExtract: boolean
+}
+
+const intialFormValid = {
+    isValidTitle: true,
+    isValidExtract: true
+}
+
+const reducerFormValid = (state: FormValidType, action: { type: string, payload: FormDataType }) => {
+    let isValid: boolean
+    switch (action.type) {
+        case "VALIDATE_TITLE":
+            isValid = action.payload.title.length > 0
+            return { ...state, isValidTitle: isValid }
+        case "VALIDATE_EXTRACT":
+            isValid = action.payload.extract.length > 10
+            return { ...state, isValidExtract: isValid }
+        default:
+            return state
+    }
+}
+
 const AddFilmPage = () => {
-    const [extract, setExtract] = useState("")
-    const [isValidExtract, setValidExtract] = useState(true)
     const [formData, dispatchFormData] = useReducer(reducerFormData, intialFormData)
-
-    const handleExtract = (e: React.FormEvent) => {
-        const value = (e.target as HTMLInputElement).value
-        // Async
-        setExtract(value)
-        validateExtract(value)
-    }
-
-    const validateExtract = (str: string) => {
-        if (str.length > 10) {
-            setValidExtract(true)
-        } else {
-            setValidExtract(false)
-        }
-    }
-
+    const [formValid, dispatchFormValid] = useReducer(reducerFormValid, intialFormValid)
+    const [messageContent, setMessageContent] = useState<{ message: string, type: string } | null>(null)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        // if (isValidTitle && isValidExtract) {
-        //     const data = {
-        //         title,
-        //         extract
-        //     }
-        //     try {
-        //         await createFilm(data)
-        //         alert("Thêm mới thành công")
-        //     } catch (err) {
-        //         alert(err)
-        //     }
-        // }
+        if (formValid.isValidExtract && formValid.isValidTitle) {
+            try {
+                await createFilm(formData)
+                setMessageContent({
+                    message: "Thêm mới thành công",
+                    type: "success"
+                })
+            } catch (err: any) {
+                setMessageContent({
+                    message: err.message,
+                    type: "error"
+                })
+            }
+        }
     }
-
-    console.log(formData);
-
-
 
     return <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg text-center">
             <h1 className="text-2xl font-bold sm:text-3xl">Thêm mới</h1>
         </div>
+        {messageContent && <Message content={messageContent} />}
 
         <form action="" onSubmit={handleSubmit} className="mx-auto mb-0 mt-8 max-w-md space-y-4">
             <div>
@@ -77,12 +85,22 @@ const AddFilmPage = () => {
                         type="text"
                         className="w-full rounded-lg border border-black p-4 pe-12 text-sm shadow-sm"
                         placeholder="Title"
-                        onChange={(e) => dispatchFormData({
-                            type: "UPDATE_TITLE",
-                            payload: e.target.value
+                        onChange={(e) => {
+                            dispatchFormData({
+                                type: "UPDATE_TITLE",
+                                payload: e.target.value
+                            })
+                            dispatchFormValid({
+                                type: "VALIDATE_TITLE",
+                                payload: formData
+                            })
+                        }}
+                        onBlur={() => dispatchFormValid({
+                            type: "VALIDATE_TITLE",
+                            payload: formData
                         })}
                     />
-                    {/* <div className="text-red-500">{!isValidTitle ? "Trường dữ liệu không hợp lệ" : ""}</div> */}
+                    <div className="text-red-500">{!formValid.isValidTitle ? "Trường dữ liệu không hợp lệ" : ""}</div>
                 </div>
             </div>
 
@@ -98,8 +116,12 @@ const AddFilmPage = () => {
                             type: "UPDATE_EXTRACT",
                             payload: e.target.value
                         })}
+                        onBlur={() => dispatchFormValid({
+                            type: "VALIDATE_EXTRACT",
+                            payload: formData
+                        })}
                     />
-                    <div className="text-red-500">{!isValidExtract ? "Trường dữ liệu không hợp lệ" : ""}</div>
+                    <div className="text-red-500">{!formValid.isValidExtract ? "Trường dữ liệu không hợp lệ" : ""}</div>
                 </div>
             </div>
 
