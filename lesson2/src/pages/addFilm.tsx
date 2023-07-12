@@ -1,5 +1,6 @@
 import { useReducer, useState } from "react"
 import { createFilm } from "../api/film"
+import Message from "../components/message"
 
 type FormDataType = {
     title: string,
@@ -49,16 +50,22 @@ const formValidReducer = function (state: FormValidType, action: { type: string,
 const AddFilmPage = function () {
     const [formData, dispatchFormData] = useReducer(formDataReducer, intialFormData)
     const [formValid, dispatchFormValid] = useReducer(formValidReducer, intialFormValid)
-
+    const [message, setMessage] = useState<{ type: string, message: string } | null>(null)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (formValid.isValidExtract && formValid.isValidTitle) {
             try {
                 await createFilm(formData)
-                alert("Thêm mới thành công!");
+                setMessage({
+                    type: "success",
+                    message: "Thêm mới thành công"
+                })
             } catch (err) {
-                alert(err.message)
+                setMessage({
+                    type: "error",
+                    message: err.message
+                })
             }
 
         } else {
@@ -72,6 +79,7 @@ const AddFilmPage = function () {
             <h1 className="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">
                 Thêm mới
             </h1>
+            {message && <Message content={message} />}
 
             <form
                 action=""

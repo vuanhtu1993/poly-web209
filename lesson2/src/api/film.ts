@@ -10,6 +10,6 @@ export const getAll = async function () {
 }
 
 export const createFilm = async function (data: { title: string, extract: string }) {
-    const res = await instance.post('/movies', data)
+    const res = await instance.post('/moviess', data)
     return res.data
 }
