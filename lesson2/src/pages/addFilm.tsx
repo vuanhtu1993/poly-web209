@@ -1,4 +1,5 @@
 import { useReducer, useState } from "react"
+import { createFilm } from "../api/film"
 
 type FormDataType = {
     title: string,
@@ -21,44 +22,49 @@ const formDataReducer = function (state: FormDataType, action: { type: string, p
     }
 }
 
+type FormValidType = {
+    isValidTitle: boolean,
+    isValidExtract: boolean
+}
+
+const intialFormValid = {
+    isValidTitle: true,
+    isValidExtract: true
+}
+
+const formValidReducer = function (state: FormValidType, action: { type: string, payload: FormDataType }) {
+    let isValid: boolean
+    switch (action.type) {
+        case "VALIDATE_TITLE":
+            isValid = action.payload.title.length > 0
+            return { ...state, isValidTitle: isValid }
+        case "VALIDATE_EXTRACT":
+            isValid = action.payload.extract.length > 10
+            return { ...state, isValidExtract: isValid }
+        default:
+            return state
+    }
+}
+
 const AddFilmPage = function () {
     const [formData, dispatchFormData] = useReducer(formDataReducer, intialFormData)
-    const [isValidTitle, setValidTitle] = useState(true)
-
-    const [isValidExtract, setValidExtract] = useState(true)
+    const [formValid, dispatchFormValid] = useReducer(formValidReducer, intialFormValid)
 
 
-    const validateTitle = (str: string) => {
-        if (str.length > 3) {
-            setValidTitle(true)
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (formValid.isValidExtract && formValid.isValidTitle) {
+            try {
+                await createFilm(formData)
+                alert("Thêm mới thành công!");
+            } catch (err) {
+                alert(err.message)
+            }
+
         } else {
-            setValidTitle(false)
+            alert("Yêu cầu kiểm tra lại")
         }
     }
-
-
-    const validateExtract = (str: string) => {
-        if (str.length > 10) {
-            setValidExtract(true)
-        } else {
-            setValidExtract(false)
-        }
-    }
-
-    // const handleSubmit = async (e: React.FormEvent) => {
-    //     e.preventDefault()
-    //     if (isValidExtract && isValidTitle) {
-    //         const data = {
-    //             title,
-    //             extract
-    //         }
-    //         console.log(data);
-    //         alert("Thêm mới thành công!");
-
-    //     } else {
-    //         alert("Yêu cầu kiểm tra lại")
-    //     }
-    // }
 
 
     return <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
@@ -69,6 +75,7 @@ const AddFilmPage = function () {
 
             <form
                 action=""
+                onSubmit={handleSubmit}
                 className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
             >
 
@@ -84,9 +91,12 @@ const AddFilmPage = function () {
                                 type: "UPDATE_TITLE",
                                 payload: e.target.value
                             })}
-                        // onBlur={() => validateTitle(title)}
+                            onBlur={() => dispatchFormValid({
+                                type: "VALIDATE_TITLE",
+                                payload: formData
+                            })}
                         />
-                        <div className="text-red-500">{!isValidTitle ? "Trường dữ liệu không hợp lệ" : ""}</div>
+                        <div className="text-red-500">{!formValid.isValidTitle ? "Trường dữ liệu không hợp lệ" : ""}</div>
                     </div>
                 </div>
 
@@ -101,8 +111,12 @@ const AddFilmPage = function () {
                                 type: "UPDATE_EXTRACT",
                                 payload: e.target.value
                             })}
+                            onBlur={() => dispatchFormValid({
+                                type: "VALIDATE_EXTRACT",
+                                payload: formData
+                            })}
                         />
-                        <div className="text-red-500">{!isValidExtract ? "Trường dữ liệu không hợp lệ" : ""}</div>
+                        <div className="text-red-500">{!formValid.isValidExtract ? "Trường dữ liệu không hợp lệ" : ""}</div>
                     </div>
                 </div>
 
