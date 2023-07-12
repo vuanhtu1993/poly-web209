@@ -1,26 +1,32 @@
-import { useState } from "react"
+import { useReducer, useState } from "react"
 import { createFilm } from "../api/film"
 
+type FormDataType = {
+    title: string,
+    extract: string
+}
+
+const intialFormData = {
+    title: "",
+    extract: ""
+}
+
+const reducerFormData = (state: FormDataType, action: { type: string, payload: string }) => {
+    // complex logic
+    switch (action.type) {
+        case "UPDATE_TITLE":
+            return { ...state, title: action.payload }
+        case "UPDATE_EXTRACT":
+            return { ...state, extract: action.payload }
+        default:
+            return state
+    }
+}
+
 const AddFilmPage = () => {
-    const [title, setTitle] = useState("")
-    const [isValidTitle, setValidTitle] = useState(true)
     const [extract, setExtract] = useState("")
     const [isValidExtract, setValidExtract] = useState(true)
-
-    const handleTitle = (e: React.FormEvent) => {
-        const value = (e.target as HTMLInputElement).value
-        // Async
-        setTitle(value)
-        validateTitle(value)
-    }
-
-    const validateTitle = (str: string) => {
-        if (str.length > 0) {
-            setValidTitle(true)
-        } else {
-            setValidTitle(false)
-        }
-    }
+    const [formData, dispatchFormData] = useReducer(reducerFormData, intialFormData)
 
     const handleExtract = (e: React.FormEvent) => {
         const value = (e.target as HTMLInputElement).value
@@ -39,19 +45,22 @@ const AddFilmPage = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (isValidTitle && isValidExtract) {
-            const data = {
-                title,
-                extract
-            }
-            try {
-                await createFilm(data)
-                alert("Thêm mới thành công")
-            } catch (err) {
-                alert(err)
-            }
-        }
+        // if (isValidTitle && isValidExtract) {
+        //     const data = {
+        //         title,
+        //         extract
+        //     }
+        //     try {
+        //         await createFilm(data)
+        //         alert("Thêm mới thành công")
+        //     } catch (err) {
+        //         alert(err)
+        //     }
+        // }
     }
+
+    console.log(formData);
+
 
 
     return <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
@@ -68,10 +77,12 @@ const AddFilmPage = () => {
                         type="text"
                         className="w-full rounded-lg border border-black p-4 pe-12 text-sm shadow-sm"
                         placeholder="Title"
-                        onChange={handleTitle}
-                        onBlur={() => validateTitle(title)}
+                        onChange={(e) => dispatchFormData({
+                            type: "UPDATE_TITLE",
+                            payload: e.target.value
+                        })}
                     />
-                    <div className="text-red-500">{!isValidTitle ? "Trường dữ liệu không hợp lệ" : ""}</div>
+                    {/* <div className="text-red-500">{!isValidTitle ? "Trường dữ liệu không hợp lệ" : ""}</div> */}
                 </div>
             </div>
 
@@ -83,8 +94,10 @@ const AddFilmPage = () => {
                         className="w-full rounded-lg border border-black p-4 pe-12 text-sm shadow-sm"
                         placeholder="Extract"
                         cols={5}
-                        onChange={handleExtract}
-                        onBlur={() => validateExtract(extract)}
+                        onChange={(e) => dispatchFormData({
+                            type: "UPDATE_EXTRACT",
+                            payload: e.target.value
+                        })}
                     />
                     <div className="text-red-500">{!isValidExtract ? "Trường dữ liệu không hợp lệ" : ""}</div>
                 </div>
