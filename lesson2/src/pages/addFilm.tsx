@@ -3,7 +3,18 @@ import { createFilm } from "../api/film"
 
 const AddFilmPage = () => {
     const [title, setTitle] = useState("")
+    const [isValidTitle, setValidTitle] = useState(true)
     const [extract, setExtract] = useState("")
+    const [isValidExtract, setValidExtract] = useState(false)
+
+    const handleValidateTitle = (e: React.FormEvent) => {
+        const value = (e.target as HTMLInputElement).value
+        if (value.length > 5) {
+            setValidTitle(true)
+        } else {
+            setValidTitle(false)
+        }
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -35,8 +46,13 @@ const AddFilmPage = () => {
                         type="text"
                         className="w-full rounded-lg border border-black p-4 pe-12 text-sm shadow-sm"
                         placeholder="Enter title"
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={(e) => {
+                            handleValidateTitle(e)
+                            setTitle(e.target.value)
+                        }}
+                        onBlur={(e) => handleValidateTitle(e)}
                     />
+                    <div className="text-red-500">{!isValidTitle ? "Trường dữ liệu không hợp lệ" : ""}</div>
                 </div>
             </div>
 
