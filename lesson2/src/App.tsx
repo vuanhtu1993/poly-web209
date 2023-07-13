@@ -5,8 +5,7 @@ import FilmPage from "./pages/filmPage"
 import { getAll } from './api/films'
 import AdminPage from './pages/adminPage'
 import AddFilmPage from './pages/addPage'
-import { createContext, useContext, useState } from 'react'
-import Message from './components/message'
+import MessageProvider from './store/message-context'
 
 const router = createBrowserRouter([
   {
@@ -35,38 +34,10 @@ const router = createBrowserRouter([
     ]
   }
 ])
-
-type AppContextType = {
-  appState: AppStateType | null,
-  showMessage: (content: { message: string, type: string }) => void | null
-}
-
-type AppStateType = {
-  messageContent?: {
-    message: string,
-    type: string
-  }
-}
-
-export const AppContext = createContext<AppContextType>({
-  appState: null,
-  showMessage: function () {
-    return null
-  }
-})
 function App() {
-  const [appState, setAppState] = useState<AppStateType>({})
-
-  const showMessage = (content: { message: string, type: string }) => {
-    setAppState((state) => {
-      return { ...state, messageContent: content }
-    })
-  }
-
-  return <AppContext.Provider value={{ appState, showMessage }}>
-    {appState.messageContent && <Message content={appState.messageContent} />}
+  return <MessageProvider>
     <RouterProvider router={router} />
-  </AppContext.Provider>
+  </MessageProvider>
 }
 
 export default App

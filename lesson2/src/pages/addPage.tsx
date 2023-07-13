@@ -1,6 +1,6 @@
 import { useContext, useReducer } from "react"
 import { createMovie } from "../api/films"
-import { AppContext } from "../App"
+import { MessageContext } from "../store/message-context"
 
 type AddForm = {
   title: string,
@@ -50,7 +50,7 @@ const validateReducer = (state: ValidateAddForm, action: { type: string, payload
 const AddFilmPage = function () {
   const [formData, setFormData] = useReducer(formReducer, initialForm)
   const [formValidate, setFormValidate] = useReducer(validateReducer, intialValidateForm)
-  const { showMessage } = useContext(AppContext)
+  const { setMessage } = useContext(MessageContext)
 
   // console.log(data);
 
@@ -63,9 +63,9 @@ const AddFilmPage = function () {
     } else {
       try {
         await createMovie(formData);
-        showMessage && showMessage({
+        setMessage && setMessage({
           message: "Thêm mới thành công 🤟",
-          type: "success"
+          type: "error"
         })
       } catch (err) {
         alert("Có lỗi xảy ra!!!")
