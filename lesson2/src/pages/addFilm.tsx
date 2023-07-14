@@ -1,7 +1,6 @@
 import { useContext, useReducer, useState } from "react"
 import { createFilm } from "../api/film"
-import Message from "../components/message"
-import { GlobalContext } from "../App"
+import { MessageContext } from "../store/message-context"
 
 type FormDataType = {
     title: string,
@@ -51,18 +50,16 @@ const formValidReducer = function (state: FormValidType, action: { type: string,
 const AddFilmPage = function () {
     const [formData, dispatchFormData] = useReducer(formDataReducer, intialFormData)
     const [formValid, dispatchFormValid] = useReducer(formValidReducer, intialFormValid)
-    const globalState = useContext(GlobalContext)
+    const { setMessage } = useContext(MessageContext)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (formValid.isValidExtract && formValid.isValidTitle) {
             try {
                 await createFilm(formData)
-                globalState.setGlobal({
-                    contentMessage: {
-                        type: "success",
-                        message: "Thêm mới thành công"
-                    }
+                setMessage({
+                    type: "success",
+                    message: "Thêm mới thành công"
                 })
             } catch (err) {
                 let errorMessage = ""
@@ -71,11 +68,9 @@ const AddFilmPage = function () {
                 } else if (err instanceof Error) {
                     errorMessage = err.message
                 }
-                globalState.setGlobal({
-                    contentMessage: {
-                        type: "error",
-                        message: errorMessage
-                    }
+                setMessage({
+                    type: "error",
+                    message: "Có lỗi xảy ra"
                 })
             }
 
@@ -83,8 +78,6 @@ const AddFilmPage = function () {
             alert("Yêu cầu kiểm tra lại")
         }
     }
-
-    console.log(globalState, "globalState");
 
     return <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">
