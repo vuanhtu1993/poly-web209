@@ -1,7 +1,6 @@
 import { useContext, useReducer, useState } from "react"
 import { createFilm } from "../api/film"
-import Message from "../components/message"
-import { MessageContext } from "../App"
+import { MessageContext } from "../store/message-context"
 
 type FormDataType = {
     title: string,
