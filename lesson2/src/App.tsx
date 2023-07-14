@@ -4,6 +4,7 @@ import FilmPage from './pages/film'
 import { getAll } from './api/film'
 import AddFilmPage from './pages/addFilm'
 import MessageProvider from './store/message-context'
+import FilmProvider from './store/film-context'
 
 const routers = createBrowserRouter([
   {
@@ -19,9 +20,11 @@ const routers = createBrowserRouter([
 ])
 
 function App() {
-  return <MessageProvider>
-    <RouterProvider router={routers} />
-  </MessageProvider>
+  return <FilmProvider>
+    <MessageProvider>
+      <RouterProvider router={routers} />
+    </MessageProvider>
+  </FilmProvider>
 }
 
 export default App
