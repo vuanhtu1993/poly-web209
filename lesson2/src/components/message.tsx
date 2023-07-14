@@ -30,7 +30,7 @@ const Message = ({ content, duration = 3000, onClose }: Props) => {
 
 
     return createPortal(
-        <Content visable={visible} type={content.type}>
+        <Content visable={visible ? "1" : "0"} type={content.type}>
             {content.message}
         </Content>,
         document.body
@@ -40,7 +40,7 @@ const Message = ({ content, duration = 3000, onClose }: Props) => {
 export default Message
 
 const Content = styled.div<{
-    visable: boolean,
+    visable: string,
     type: string
 }>`
   position: fixed;
@@ -53,6 +53,6 @@ const Content = styled.div<{
   color: #fff;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
-  opacity: ${props => props.visable ? 1 : 0};
+  opacity: ${props => props.visable};
   background-color: ${props => props.type === "success" ? "#52c41a" : "#f5222d"};
 `

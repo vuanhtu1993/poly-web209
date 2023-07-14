@@ -1,9 +1,16 @@
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom'
 import HomePage from "./pages/home"
 import AddFilmPage from './pages/addFilm'
+import { createContext, useState } from 'react'
+import Message from './components/message'
+
+export const MessageContext = createContext({} as any)
 
 function UserLayout() {
-  return <div>
+  const [message, setMessage] = useState(null)
+
+  return <MessageContext.Provider value={{ message, setMessage }}>
+    {message && <Message content={message} />}
     <header>
       <img className="w-[80px]" src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png" alt="" />
     </header>
@@ -11,7 +18,7 @@ function UserLayout() {
     <footer>
       Footer
     </footer>
-  </div>
+  </MessageContext.Provider>
 }
 
 const App = () => {

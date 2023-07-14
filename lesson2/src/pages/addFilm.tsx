@@ -1,6 +1,7 @@
-import { useReducer, useState } from "react"
+import { useContext, useReducer, useState } from "react"
 import { createFilm } from "../api/film"
 import Message from "../components/message"
+import { MessageContext } from "../App"
 
 type FormDataType = {
     title: string,
@@ -51,21 +52,26 @@ const reducerFormValid = (state: FormValidType, action: { type: string, payload:
 const AddFilmPage = () => {
     const [formData, dispatchFormData] = useReducer(reducerFormData, intialFormData)
     const [formValid, dispatchFormValid] = useReducer(reducerFormValid, intialFormValid)
-    const [messageContent, setMessageContent] = useState<{ message: string, type: string } | null>(null)
+    const { message, setMessage } = useContext(MessageContext)
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (formValid.isValidExtract && formValid.isValidTitle) {
             try {
                 await createFilm(formData)
-                setMessageContent({
-                    message: "Thêm mới thành công",
-                    type: "success"
+                // setMessageContent({
+                //     message: "Thêm mới thành công",
+                //     type: "success"
+                // })
+                setMessage({
+                    type: "success",
+                    message: "Thêm mới thành công"
                 })
             } catch (err: any) {
-                setMessageContent({
-                    message: err.message,
-                    type: "error"
-                })
+                // setMessageContent({
+                //     message: err.message,
+                //     type: "error"
+                // })
             }
         }
     }
@@ -74,8 +80,6 @@ const AddFilmPage = () => {
         <div className="mx-auto max-w-lg text-center">
             <h1 className="text-2xl font-bold sm:text-3xl">Thêm mới</h1>
         </div>
-        {messageContent && <Message content={messageContent} />}
-
         <form action="" onSubmit={handleSubmit} className="mx-auto mb-0 mt-8 max-w-md space-y-4">
             <div>
                 <label className="sr-only">Title</label>
