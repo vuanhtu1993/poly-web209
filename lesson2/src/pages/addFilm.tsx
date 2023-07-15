@@ -1,6 +1,7 @@
-import { useReducer, useState } from "react"
+import { useContext, useReducer, useState } from "react"
 import { createFilm } from "../api/film"
 import Message from "../components/message"
+import { MessageContext } from "../App"
 
 type State = {
     title: string,
@@ -38,7 +39,7 @@ const reducer = (state: State, action: { type: string, payload: string }) => {
 
 const AddFilmPage = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
-    const [contentMessage, setContentMessage] = useState<{ type: string, message: string } | null>(null)
+    const { message, setMessage } = useContext(MessageContext)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -49,26 +50,24 @@ const AddFilmPage = () => {
             }
             await createFilm(data)
             // alert("Thêm mới thành công")
-            setContentMessage({
+            setMessage({
                 type: "success",
                 message: "Thêm mới thành công"
             })
         } catch (err) {
-            setContentMessage({
+            setMessage({
                 type: "error",
                 message: "Có lỗi xảy ra"
             })
         }
     }
 
-    console.log(state);
+    console.log(message, "message context");
 
     return <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg text-center">
             <h1 className="text-2xl font-bold sm:text-3xl">Thêm mới Film</h1>
         </div>
-        {contentMessage && <Message content={contentMessage} />}
-
 
         <form action="" onSubmit={handleSubmit} className="mx-auto mb-0 mt-8 max-w-md space-y-4">
             <div>
