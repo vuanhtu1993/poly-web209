@@ -1,5 +1,6 @@
 import { useReducer, useState } from "react"
 import { createFilm } from "../api/film"
+import Message from "../components/message"
 
 type State = {
     title: string,
@@ -12,7 +13,7 @@ const initialState = {
     title: "",
     isValidTitle: true,
     extract: "",
-    isValidExtract: true
+    isValidExtract: true,
 }
 
 const reducer = (state: State, action: { type: string, payload: string }) => {
@@ -25,7 +26,11 @@ const reducer = (state: State, action: { type: string, payload: string }) => {
             isValid = action.payload.length > 5
             return { ...state, isValidTitle: isValid }
         case "UPDATE_EXTRACT":
-            return state
+            isValid = action.payload.length > 10
+            return { ...state, extract: action.payload, isValidExtract: isValid }
+        case "VALIDATE_EXTRACT":
+            isValid = action.payload.length > 10
+            return { ...state, isValidExtract: isValid }
         default:
             return state
     }
@@ -33,19 +38,27 @@ const reducer = (state: State, action: { type: string, payload: string }) => {
 
 const AddFilmPage = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
+    const [contentMessage, setContentMessage] = useState<{ type: string, message: string } | null>(null)
 
     const handleSubmit = async (e: React.FormEvent) => {
-        // e.preventDefault()
-        // try {
-        //     const data = {
-        //         title,
-        //         extract
-        //     }
-        //     await createFilm(data)
-        //     alert("Thêm mới thành công")
-        // } catch (err) {
-        //     alert("Có lỗi xảy ra")
-        // }
+        e.preventDefault()
+        try {
+            const data = {
+                title: state.title,
+                extract: state.extract
+            }
+            await createFilm(data)
+            // alert("Thêm mới thành công")
+            setContentMessage({
+                type: "success",
+                message: "Thêm mới thành công"
+            })
+        } catch (err) {
+            setContentMessage({
+                type: "error",
+                message: "Có lỗi xảy ra"
+            })
+        }
     }
 
     console.log(state);
@@ -54,6 +67,8 @@ const AddFilmPage = () => {
         <div className="mx-auto max-w-lg text-center">
             <h1 className="text-2xl font-bold sm:text-3xl">Thêm mới Film</h1>
         </div>
+        {contentMessage && <Message content={contentMessage} />}
+
 
         <form action="" onSubmit={handleSubmit} className="mx-auto mb-0 mt-8 max-w-md space-y-4">
             <div>
@@ -84,8 +99,16 @@ const AddFilmPage = () => {
                     <textarea
                         className="w-full rounded-lg border border-black p-4 pe-12 text-sm shadow-sm"
                         placeholder="Enter extract"
-                    // onChange={(e) => setExtract(e.target.value)}
+                        onChange={(e) => dispatch({
+                            type: "UPDATE_EXTRACT",
+                            payload: e.target.value
+                        })}
+                        onBlur={(e) => dispatch({
+                            type: "VALIDATE_EXTRACT",
+                            payload: e.target.value
+                        })}
                     />
+                    <div className="text-red-500">{!state.isValidExtract ? "Trường dữ liệu không hợp lệ" : ""}</div>
                 </div>
             </div>
 
