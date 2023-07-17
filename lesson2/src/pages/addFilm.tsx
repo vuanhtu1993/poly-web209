@@ -1,6 +1,7 @@
 import { useContext, useReducer, useState } from "react"
 import { createFilm } from "../api/film"
 import { MessageContext } from "../store/message-context"
+import { produce } from 'immer'
 
 type FormDataType = {
     title: string,
@@ -12,14 +13,17 @@ const intialFormData = {
     extract: ""
 }
 
-const formDataReducer = function (state: FormDataType, action: { type: string, payload: string }) {
+const formDataReducer = function (draft: FormDataType, action: { type: string, payload: string }) {
     switch (action.type) {
         case "UPDATE_TITLE":
-            return { ...state, title: action.payload }
+            // return { ...state, title: action.payload }
+            draft.title = action.payload
+            break
         case "UPDATE_EXTRACT":
-            return { ...state, extract: action.payload }
+            draft.extract = action.payload
+            break
         default:
-            return state
+            return draft
     }
 }
 
@@ -33,23 +37,27 @@ const intialFormValid = {
     isValidExtract: true
 }
 
-const formValidReducer = function (state: FormValidType, action: { type: string, payload: FormDataType }) {
+const formValidReducer = function (draft: FormValidType, action: { type: string, payload: FormDataType }) {
     let isValid: boolean
     switch (action.type) {
         case "VALIDATE_TITLE":
             isValid = action.payload.title.length > 0
-            return { ...state, isValidTitle: isValid }
+            // return { ...state, isValidTitle: isValid }
+            draft.isValidTitle = isValid
+            break
         case "VALIDATE_EXTRACT":
             isValid = action.payload.extract.length > 10
-            return { ...state, isValidExtract: isValid }
+            // return { ...state, isValidExtract: isValid }
+            draft.isValidExtract = isValid
+            break
         default:
-            return state
+            return draft
     }
 }
 
 const AddFilmPage = function () {
-    const [formData, dispatchFormData] = useReducer(formDataReducer, intialFormData)
-    const [formValid, dispatchFormValid] = useReducer(formValidReducer, intialFormValid)
+    const [formData, dispatchFormData] = useReducer(produce(formDataReducer), intialFormData)
+    const [formValid, dispatchFormValid] = useReducer(produce(formValidReducer), intialFormValid)
     const { setMessage } = useContext(MessageContext)
 
     const handleSubmit = async (e: React.FormEvent) => {
