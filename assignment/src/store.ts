@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { FilmReducer } from './pages/filmPage/film.reducer'
 
-const store = configureStore({
-  reducers: {}
+export const store = configureStore({
+  reducer: {
+    "films": FilmReducer
+  }
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

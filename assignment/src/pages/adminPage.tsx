@@ -1,8 +1,21 @@
-import { useLoaderData, Link } from 'react-router-dom'
-import { IFilm } from '../models'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { RootState } from '../store'
+import { useEffect } from 'react'
+import { getAll } from '../api/films'
+import { fetchFilm } from './filmPage/film.reducer'
 
 const AdminPage = function () {
-  const { films } = useLoaderData() as { films: IFilm[] }
+  const { films } = useSelector((state: RootState) => state.films)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const getAllFilms = async () => {
+      const res = await getAll()
+      dispatch(fetchFilm(res))
+    }
+    getAllFilms()
+  }, [])
 
   return <div className="container mx-auto">
     <div className='flex justify-between'>
@@ -27,7 +40,7 @@ const AdminPage = function () {
         </thead>
 
         <tbody className="divide-y divide-gray-200">
-          {films.map(item => <tr>
+          {films.map(item => <tr key={item.id}>
             <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
               {item.title}
             </td>

@@ -12,5 +12,5 @@ export const getAll = async function () {
 
 export const createMovie = async (data: IFilm) => {
   const res = await instance.post("/movies", data)
-  return res
+  return res.data
 }

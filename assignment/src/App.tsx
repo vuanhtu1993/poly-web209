@@ -21,11 +21,7 @@ const router = createBrowserRouter([
       { path: "/film/:id", element: <FilmPage /> },
       {
         path: "/admin",
-        element: <AdminPage />,
-        loader: async () => {
-          const films = await getAll()
-          return { films }
-        }
+        element: <AdminPage />
       },
       {
         path: "/admin/add",
