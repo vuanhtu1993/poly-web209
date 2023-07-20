@@ -1,11 +1,11 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import ClientLayout from "./components/layout/client"
 import HomePage from "./pages/homePage"
-import FilmPage from "./pages/filmPage"
+import FilmPage from "./pages/filmPage/filmPage"
 import { getAll } from './api/films'
 import AdminPage from './pages/adminPage'
-import AddFilmPage from './pages/addPage'
-import MessageProvider from './store/message-context'
+import AddFilmPage from './pages/filmPage/addFilmPage'
+import MessageProvider from './context/message-context'
 
 const router = createBrowserRouter([
   {

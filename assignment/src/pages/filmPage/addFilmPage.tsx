@@ -1,6 +1,6 @@
 import { useContext, useReducer } from "react"
-import { createMovie } from "../api/films"
-import { MessageContext } from "../store/message-context"
+import { createMovie } from "../../api/films"
+import { MessageContext } from "../../context/message-context"
 
 type AddForm = {
   title: string,
