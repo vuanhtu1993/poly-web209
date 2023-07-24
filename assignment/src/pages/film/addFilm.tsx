@@ -2,7 +2,7 @@ import { useContext, useReducer, useState } from "react"
 import { createFilm } from "../../api/film"
 import { MessageContext } from "../../context/message-context"
 import { useDispatch } from "react-redux"
-import { addFilm } from "./film.reducer"
+import { add as addFilm } from "./film.reducer"
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 

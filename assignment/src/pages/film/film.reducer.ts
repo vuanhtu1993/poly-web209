@@ -1,4 +1,4 @@
-import { createReducer, createAction } from '@reduxjs/toolkit'
+import { createReducer, createAction, createSlice } from '@reduxjs/toolkit'
 import { IFilm } from '../../models'
 
 
@@ -7,18 +7,36 @@ const intialState = {
     isLoading: false
 } as { films: IFilm[], isLoading: boolean }
 
-export const fetchFilm = createAction<IFilm[]>("film/fetch")
-export const addFilm = createAction<IFilm>("film/add")
+// export const fetchFilm = createAction<IFilm[]>("film/fetch")
+// export const addFilm = createAction<IFilm>("film/add")
 
-// fetchFilm() => {type: "film/fetch"}
-// fetchFilm({a: 10}) => {type: "film/fetch", payload: {a: 10}}
+// // fetchFilm() => {type: "film/fetch"}
+// // fetchFilm({a: 10}) => {type: "film/fetch", payload: {a: 10}}
 
-export const filmReducer = createReducer(intialState, (builder) => {
-    // immerjs integrated
-    builder.addCase(fetchFilm, (state, action) => {
-        state.films = action.payload
-    })
-    builder.addCase(addFilm, (state, action) => {
-        // state.films.push(action.payload)
-    })
+// export const filmReducer = createReducer(intialState, (builder) => {
+//     // immerjs integrated
+//     builder.addCase(fetchFilm, (state, action) => {
+//         state.films = action.payload
+//     })
+//     builder.addCase(addFilm, (state, action) => {
+//         // state.films.push(action.payload)
+//     })
+// })
+
+// Slice
+const filmSlice = createSlice({
+    name: "film",
+    initialState: intialState,
+    reducers: {
+        fetch: function (state, action) {
+            // film/fetch
+            state.films = action.payload
+        },
+        add: function (state, action) {
+            // 
+        }
+    }
 })
+
+export const filmReducer = filmSlice.reducer
+export const { fetch, add } = filmSlice.actions

@@ -3,7 +3,7 @@ import FilmCard from '../../components/filmCard'
 import { IFilm } from '../../models'
 import { getAll } from '../../api/film'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchFilm } from '../film/film.reducer'
+import { fetch as fetchFilm } from '../film/film.reducer'
 import { RootState } from '../../store'
 
 const HomePage = function () {
