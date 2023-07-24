@@ -1,89 +1,36 @@
 import { useContext, useReducer, useState } from "react"
 import { createFilm } from "../../api/film"
 import { MessageContext } from "../../context/message-context"
-import { produce } from 'immer'
+import { useDispatch } from "react-redux"
+import { addFilm } from "./film.reducer"
+import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 
 type FormDataType = {
     title: string,
     extract: string
 }
 
-const intialFormData = {
-    title: "",
-    extract: ""
-}
-
-const formDataReducer = function (draft: FormDataType, action: { type: string, payload: string }) {
-    switch (action.type) {
-        case "UPDATE_TITLE":
-            // return { ...state, title: action.payload }
-            draft.title = action.payload
-            break
-        case "UPDATE_EXTRACT":
-            draft.extract = action.payload
-            break
-        default:
-            return draft
-    }
-}
-
-type FormValidType = {
-    isValidTitle: boolean,
-    isValidExtract: boolean
-}
-
-const intialFormValid = {
-    isValidTitle: true,
-    isValidExtract: true
-}
-
-const formValidReducer = function (draft: FormValidType, action: { type: string, payload: FormDataType }) {
-    let isValid: boolean
-    switch (action.type) {
-        case "VALIDATE_TITLE":
-            isValid = action.payload.title.length > 0
-            // return { ...state, isValidTitle: isValid }
-            draft.isValidTitle = isValid
-            break
-        case "VALIDATE_EXTRACT":
-            isValid = action.payload.extract.length > 10
-            // return { ...state, isValidExtract: isValid }
-            draft.isValidExtract = isValid
-            break
-        default:
-            return draft
-    }
-}
-
 const AddFilmPage = function () {
-    const [formData, dispatchFormData] = useReducer(produce(formDataReducer), intialFormData)
-    const [formValid, dispatchFormValid] = useReducer(produce(formValidReducer), intialFormValid)
+    const { register, handleSubmit, formState: { errors } } = useForm<FormDataType>()
     const { setMessage } = useContext(MessageContext)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (formValid.isValidExtract && formValid.isValidTitle) {
-            try {
-                await createFilm(formData)
-                setMessage({
-                    type: "success",
-                    message: "Thêm mới thành công"
-                })
-            } catch (err) {
-                let errorMessage = ""
-                if (typeof err === "string") {
-                    errorMessage = err
-                } else if (err instanceof Error) {
-                    errorMessage = err.message
-                }
-                setMessage({
-                    type: "error",
-                    message: "Có lỗi xảy ra"
-                })
-            }
+    const onSubmit = async (data: FormDataType) => {
+        try {
+            const res = await createFilm(data)
+            dispatch(addFilm)
+            setMessage({
+                type: "success",
+                message: "Thêm mới thành công"
+            })
 
-        } else {
-            alert("Yêu cầu kiểm tra lại")
+        } catch (errors) {
+            setMessage({
+                type: "error",
+                message: "Có lỗi xảy ra"
+            })
         }
     }
 
@@ -95,10 +42,9 @@ const AddFilmPage = function () {
 
             <form
                 action=""
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmit(onSubmit)}
                 className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
             >
-
                 <div>
                     <label className="sr-only">Title</label>
 
@@ -107,16 +53,12 @@ const AddFilmPage = function () {
                             type="text"
                             className="w-full rounded-lg border border-black p-4 pe-12 text-sm shadow-sm"
                             placeholder="Enter Title"
-                            onChange={(e) => dispatchFormData({
-                                type: "UPDATE_TITLE",
-                                payload: e.target.value
-                            })}
-                            onBlur={() => dispatchFormValid({
-                                type: "VALIDATE_TITLE",
-                                payload: formData
+                            {...register("title", {
+                                required: "Trường dữ liệu bắt buộc",
+                                minLength: { value: 5, message: "Tối thiểu 5 ký tự" }
                             })}
                         />
-                        <div className="text-red-500">{!formValid.isValidTitle ? "Trường dữ liệu không hợp lệ" : ""}</div>
+                        <div className="text-red-500">{errors.title && errors.title.message}</div>
                     </div>
                 </div>
 
@@ -127,16 +69,12 @@ const AddFilmPage = function () {
                         <textarea
                             className="w-full rounded-lg border border-black p-4 pe-12 text-sm shadow-sm"
                             placeholder="Enter Extract"
-                            onChange={(e) => dispatchFormData({
-                                type: "UPDATE_EXTRACT",
-                                payload: e.target.value
-                            })}
-                            onBlur={() => dispatchFormValid({
-                                type: "VALIDATE_EXTRACT",
-                                payload: formData
+                            {...register("extract", {
+                                required: "Trường dữ liệu bắt buộc",
+                                minLength: { value: 10, message: "Tối thiểu 10 ký tự" }
                             })}
                         />
-                        <div className="text-red-500">{!formValid.isValidExtract ? "Trường dữ liệu không hợp lệ" : ""}</div>
+                        <div className="text-red-500">{errors.extract && errors.extract.message}</div>
                     </div>
                 </div>
 
