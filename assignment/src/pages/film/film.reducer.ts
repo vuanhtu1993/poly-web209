@@ -1,4 +1,4 @@
-import { createReducer, createAction, createSlice } from '@reduxjs/toolkit'
+import { createReducer, createAction, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IFilm } from '../../models'
 
 
@@ -28,6 +28,12 @@ const filmSlice = createSlice({
     name: "film",
     initialState: intialState,
     reducers: {
+        startLoading: function (state, action: PayloadAction<void>) {
+            state.isLoading = true
+        },
+        endLoading: function (state, action: PayloadAction<void>) {
+            state.isLoading = false
+        },
         fetch: function (state, action) {
             // film/fetch
             state.films = action.payload
@@ -39,4 +45,4 @@ const filmSlice = createSlice({
 })
 
 export const filmReducer = filmSlice.reducer
-export const { fetch, add } = filmSlice.actions
+export const { fetch, add, startLoading, endLoading } = filmSlice.actions
