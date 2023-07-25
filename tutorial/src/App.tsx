@@ -1,9 +1,18 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import axios from 'axios'
+import AddTodo from "./components/addTodo"
+
+export type Task = {
+  name: string, id: number, isDone: boolean
+}
+
+const handleCount1 = () => {
+  console.log("handleCount1");
+  return 1 + 1
+}
 
 function App() {
-  const [tasks, setTasks] = useState<{ name: string, id: number, isDone: boolean }[] | []>([])
-  const [todo, setTodo] = useState("")
+  const [tasks, setTasks] = useState<Task[] | []>([])
   const [status, setStatus] = useState<boolean | null>(null)
 
   // UseEffect
@@ -17,43 +26,22 @@ function App() {
     }).then(res => setTasks(res.data))
   }, [status])
 
-  const handleAddTodo = (e: React.KeyboardEvent) => {
-    if (e.code === "Enter") {
-      const newTask = {
-        name: todo,
-        isDone: false,
-        id: Date.now()
-      }
-      // tasks.push(newTask)
-      setTasks([...tasks, newTask])
-      setTodo("")
-    }
-  }
+  // useCallback
+  const handleAddTodo = useCallback((task: Task) => {
+    setTasks((prev) => {
+      return [...prev, task]
+    })
+  }, [])
 
-  // console.log(tasks);
-
+  // useMemo
+  const handleCount = useMemo(() => handleCount1(), [])
 
   return (
     <div className="text-center container mx-auto">
       <h1 className="text-2lg font-bold bg-red-400">Todo list</h1>
-      <div className="mt-4">
-        <label
-          className="block overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
-        >
-          <span className="text-xs font-medium text-gray-700"> Email </span>
-
-          <input
-            onChange={(e) => setTodo(e.target.value)}
-            onKeyPress={handleAddTodo}
-            type="text"
-            value={todo}
-            placeholder="Task 1"
-            className="mt-1 w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-          />
-        </label>
-      </div>
+      <AddTodo addTodo={handleAddTodo} />
       <div>
-        <h1>Công việc trong ngày</h1>
+        <h1>Công việc trong ngày <span className="text-xl font-bold text-red-500">{handleCount}</span></h1>
         <select name="" id="" className="block ml-auto" onChange={e => {
           console.log(e.target.value);
 
