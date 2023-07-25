@@ -1,10 +1,16 @@
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import AddTodo from "./components/addTodo"
 
 export type Task = {
   name: string,
   isDone: boolean,
   id: number
+}
+
+const countTasks = (tasks: Task[]) => {
+  console.log("count tasks is called");
+
+  return tasks.length
 }
 
 function App() {
@@ -15,20 +21,24 @@ function App() {
   ])
   const [count, setCount] = useState(0)
 
+  // memo
+  // useCallback
+  // const func1 = useCallback(() => {}, [deps])
   // type: function => Object
   const handleAddTask = useCallback((task: Task) => {
     setTasks(prev => [...prev, task])
   }, [])
-
-  // memo
-  // useCallback
-  // const func1 = useCallback(() => {}, [deps])
+  // useMemo
+  // const memoFunc1 = useCallback(() => <gia tri>, [deps])
+  // const 
+  const memoCountTasks = useMemo(() => countTasks(tasks), [tasks])
 
   return <div className="container mx-auto">
     <h1 className="text-2xl bg-red-500 text-center">Todo list</h1>
     <div className="mt-4">
       <button onClick={() => setCount(count + 1)}>Count: {count}</button>
       <AddTodo addTask={handleAddTask} />
+      <h1>Công việc cần làm: <span className="text-rose-500 font-bold">{memoCountTasks}</span></h1>
       <div className="mt-4 grid grid-cols-4 gap-3">
         {tasks.map((item, index) => <div key={item.id} className="border border-blue-300 border-dashed rounded-sm">
           <h2>stt:{index + 1}</h2>
