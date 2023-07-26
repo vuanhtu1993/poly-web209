@@ -3,21 +3,29 @@ import FilmCard from '../../components/filmCard'
 import { IFilm } from '../../models'
 import { getAll } from '../../api/film'
 import { useDispatch, useSelector } from 'react-redux'
-import { endLoading, fetch as fetchFilm, startLoading } from '../film/film.reducer'
+import { endLoading, fetchFilm, startLoading } from '../film/film.reducer'
 import { RootState } from '../../store'
 import LoadingSkeleton from '../../components/skeleton'
+import { MessageContext } from '../../context/message-context'
 
 const HomePage = function () {
     const { films, isLoading } = useSelector((state: RootState) => state.films)
     const dispatch = useDispatch()
-    useEffect(() => {
-        const getData = async function () {
-            const data = await getAll()
-            dispatch(fetchFilm(data))
-            dispatch(endLoading())
+    const { setMessage } = useContext(MessageContext)
+
+    const handleFetchFilms = async () => {
+        try {
+            await dispatch(fetchFilm()).unwrap()
+        } catch (err) {
+            setMessage({
+                type: "error",
+                message: err
+            })
         }
-        dispatch(startLoading())
-        getData()
+    }
+
+    useEffect(() => {
+        handleFetchFilms()
     }, [])
 
 
@@ -38,8 +46,3 @@ const HomePage = function () {
 }
 
 export default HomePage
-
-const result = attempt(function () {
-    return Function(importsKeys, sourceURL + 'return ' + source)
-        .apply(undefined, importsValues);
-});

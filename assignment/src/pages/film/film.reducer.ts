@@ -1,29 +1,27 @@
-import { createReducer, createAction, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createReducer, createAction, createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { IFilm } from '../../models'
+import { getAll } from '../../api/film'
 
+// CreateAsyncThunk => payloadCreation
+export const fetchFilm = createAsyncThunk<IFilm[]>('film/fetch', async (arg, { rejectWithValue, }) => {
+    try {
+        const data = await getAll()
+        return data
+    } catch (err) {
+        return rejectWithValue(err.message)
+    }
+})
+
+// // Sync
+// const fetchFilmPending = createAction('film/fetch')
+// const fetchFilmFullfilled = createAction('film/fetch')
 
 const intialState = {
     films: [],
     isLoading: false
 } as { films: IFilm[], isLoading: boolean }
 
-// export const fetchFilm = createAction<IFilm[]>("film/fetch")
-// export const addFilm = createAction<IFilm>("film/add")
-
-// // fetchFilm() => {type: "film/fetch"}
-// // fetchFilm({a: 10}) => {type: "film/fetch", payload: {a: 10}}
-
-// export const filmReducer = createReducer(intialState, (builder) => {
-//     // immerjs integrated
-//     builder.addCase(fetchFilm, (state, action) => {
-//         state.films = action.payload
-//     })
-//     builder.addCase(addFilm, (state, action) => {
-//         // state.films.push(action.payload)
-//     })
-// })
-
-// Slice
+// Slice => reducer + action
 const filmSlice = createSlice({
     name: "film",
     initialState: intialState,
@@ -41,6 +39,15 @@ const filmSlice = createSlice({
         add: function (state, action) {
             // 
         }
+    },
+    extraReducers: builder => {
+        builder.addCase(fetchFilm.pending, (state) => {
+            state.isLoading = true
+        })
+        builder.addCase(fetchFilm.fulfilled, (state, action) => {
+            state.films = action.payload
+            state.isLoading = false
+        })
     }
 })
 

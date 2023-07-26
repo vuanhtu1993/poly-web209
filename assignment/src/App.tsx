@@ -9,11 +9,7 @@ import FilmProvider from './context/film-context'
 const routers = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />,
-    loader: async () => {
-      const films = await getAll()
-      return { films }
-    }
+    element: <HomePage />
   },
   { path: '/film/:id', element: <FilmPage /> },
   { path: '/film/add', element: <AddFilmPage /> },
