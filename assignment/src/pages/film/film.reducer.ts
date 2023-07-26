@@ -1,13 +1,14 @@
 import { createReducer, createAction, createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { IFilm } from '../../models'
 import { getAll } from '../../api/film'
+import { AxiosError } from 'axios'
 
 // CreateAsyncThunk => payloadCreation
 export const fetchFilm = createAsyncThunk<IFilm[]>('film/fetch', async (arg, { rejectWithValue, }) => {
     try {
         const data = await getAll()
         return data
-    } catch (err) {
+    } catch (err: any) {
         return rejectWithValue(err.message)
     }
 })

@@ -7,10 +7,11 @@ import { endLoading, fetchFilm, startLoading } from '../film/film.reducer'
 import { RootState } from '../../store'
 import LoadingSkeleton from '../../components/skeleton'
 import { MessageContext } from '../../context/message-context'
+import { useAppDispatch } from '../../hook'
 
 const HomePage = function () {
     const { films, isLoading } = useSelector((state: RootState) => state.films)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const { setMessage } = useContext(MessageContext)
 
     const handleFetchFilms = async () => {
