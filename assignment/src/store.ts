@@ -3,7 +3,7 @@ import { filmsReducer } from './pages/films/films.reducer'
 
 export const store = configureStore({
     reducer: {
-        films: filmsReducer
+        films: filmsReducer,
     }
 })
 
