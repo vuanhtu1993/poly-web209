@@ -1,4 +1,28 @@
 {
+  "users": [
+    {
+      "email": "tuva9@fpt.edu.vn",
+      "password": "$2a$10$Rwns4mxDHL4KAJdhGs5yWeGeWr9sIO6JmoYesXgfKCpmlywb79Fey",
+      "firstname": "Vũ",
+      "lastname": "Anh Tú",
+      "passwordConfirmation": "123456",
+      "id": 1
+    },
+    {
+      "email": "tuva10@fpt.edu.vn",
+      "password": "$2a$10$IHWCKyYEmvaf7TIT.8D.O.go6CzDsVdoZS2rzHD7vcKDnM1JKXK32",
+      "lastname": "Anh Tú",
+      "firstname": "Vũ",
+      "id": 2
+    },
+    {
+      "email": "tuva8@fpt.edu.vn",
+      "password": "$2a$10$YSdlizH6MB2EIpuLRtB0WODaebqoY3BztLaYUYKPcU/irThulkXzi",
+      "lastname": "Anh Tú",
+      "firstname": "Vũ",
+      "id": 3
+    }
+  ],
   "movies": [
     {
       "id": 1,

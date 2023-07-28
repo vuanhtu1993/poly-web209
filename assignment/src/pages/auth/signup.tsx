@@ -1,8 +1,13 @@
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { signup } from './auth.slice'
+import { AppDispatch } from '../../store'
+import { useContext } from 'react'
+import { MessageContext } from '../../context/message-context'
 
 type SignupForm = {
-  firstName: string,
-  lastName: string,
+  firstname: string,
+  lastname: string,
   email: string,
   password: string,
   passwordConfirmation: string
@@ -10,10 +15,25 @@ type SignupForm = {
 
 const SignUp = () => {
   const { register, formState: { errors }, handleSubmit } = useForm<SignupForm>()
+  const dispatch = useDispatch<AppDispatch>()
+  const { setMessage } = useContext(MessageContext)
 
-  const onSubmit = (data: SignupForm) => {
-    console.log(data);
+  const onSubmit = async ({ lastname, firstname, email, password }: SignupForm) => {
+    const user = {
+      lastname,
+      firstname,
+      email,
+      password
+    }
 
+    try {
+      const res = await dispatch(signup(user)).unwrap()
+    } catch (err) {
+      setMessage({
+        type: "error",
+        message: err
+      })
+    }
   }
 
   return <section className="bg-white" >
@@ -63,7 +83,7 @@ const SignUp = () => {
 
               <input
                 type="text"
-                {...register('firstName', { required: "Dữ liệu bắt buộc", minLength: { value: 5, message: "Tối thiệu 5 ký tự" } })}
+                {...register('firstname', { required: "Dữ liệu bắt buộc", minLength: { value: 2, message: "Tối thiệu 5 ký tự" } })}
                 className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
               />
             </div>
@@ -77,7 +97,7 @@ const SignUp = () => {
 
               <input
                 type="text"
-                {...register('lastName', { required: "Dữ liệu bắt buộc", minLength: { value: 5, message: "Tối thiệu 5 ký tự" } })}
+                {...register('lastname', { required: "Dữ liệu bắt buộc", minLength: { value: 2, message: "Tối thiệu 5 ký tự" } })}
                 className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
               />
             </div>

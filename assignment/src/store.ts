@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { filmReducer } from './pages/film/film.reducer'
+import { authReducer } from './pages/auth/auth.slice'
 
 export const store = configureStore({
-    reducer: {
-        films: filmReducer
-    }
+  reducer: {
+    films: filmReducer,
+    auth: authReducer
+  }
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
