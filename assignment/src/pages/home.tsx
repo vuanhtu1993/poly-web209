@@ -1,30 +1,30 @@
 import { useState, useEffect, useContext } from 'react'
 import Film from '../components/film'
-import { getAll } from '../api/film'
-import { IFilm } from '../models'
 import { useDispatch, useSelector } from 'react-redux'
-import { endLoading, fetch as fetchFilms, startLoading } from './films/films.reducer'
-import { RootState } from '../store'
+import { fetchFilms } from './films/films.slice'
+import { AppDispatch, RootState } from '../store'
 import LoadingSkeleton from '../components/skeleton'
 
 const HomePage = () => {
     const { films, isLoading } = useSelector((state: RootState) => state.films)
-    const dispatch = useDispatch()
-    useEffect(() => {
-        const getFilms = async () => {
-            const data = await getAll()
-            // setFilms(data)
-            dispatch(fetchFilms(data))
-            dispatch(endLoading())
+    const dispatch = useDispatch<AppDispatch>()
+
+    const handleFetchFilm = async () => {
+        try {
+            const data = await dispatch(fetchFilms()).unwrap()
+        } catch (err) {
+            console.log(err);
         }
-        dispatch(startLoading())
-        getFilms()
+    }
+
+    useEffect(() => {
+        handleFetchFilm()
     }, [])
 
     return <div className="pt-4 grid grid-cols-3 gap-2">
         {/* Render dynamic - props*/}
         {isLoading && <LoadingSkeleton />}
-        {films.map((item) => <Film data={item} />)}
+        {films.map((item) => <Film data={item} key={item.id} />)}
     </div>
 }
 
