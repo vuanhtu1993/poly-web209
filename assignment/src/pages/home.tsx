@@ -3,7 +3,7 @@ import Film from '../components/film'
 import { getAll } from '../api/film'
 import { IFilm } from '../models'
 import { useDispatch, useSelector } from 'react-redux'
-import { endLoading, fetchFilms, startLoading } from './films/films.reducer'
+import { endLoading, fetch as fetchFilms, startLoading } from './films/films.reducer'
 import { RootState } from '../store'
 import LoadingSkeleton from '../components/skeleton'
 
