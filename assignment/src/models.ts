@@ -8,3 +8,11 @@ export interface IFilm {
     extract: string,
     thumbnail: string
 }
+
+export interface IUser {
+    id?: number,
+    fullname: string,
+    lastname: string,
+    email: string,
+    password: string
+}

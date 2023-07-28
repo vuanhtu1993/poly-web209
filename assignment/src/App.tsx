@@ -3,6 +3,7 @@ import HomePage from "./pages/home"
 import AddFilmPage from './pages/films/addFilm'
 import MessageProvider from './context/message-context'
 import FilmProvider from './context/film-context'
+import SignUp from './pages/auth/signup'
 
 
 
@@ -29,6 +30,7 @@ const App = () => {
         { path: "/add", element: <AddFilmPage /> },
       ]
     },
+    { path: "/signup", element: <SignUp /> }
   ])
   return <RouterProvider router={router} />
 }
