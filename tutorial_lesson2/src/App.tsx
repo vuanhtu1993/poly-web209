@@ -1,8 +1,7 @@
-import { useCallback, useMemo, useReducer, useState } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
 import AddTodo from "./components/addTodo"
 import Status from "./components/status"
-import { produce } from 'immer'
-import taskReducer from "./reducers/task.reducer"
+import { ProductContext } from "./context/product.context"
 
 export type Task = {
   name: string,
@@ -16,11 +15,7 @@ const countTasks = (tasks: Task[]) => {
   return tasks.length
 }
 
-const intialState = [
-  { name: "Công việc 1", isDone: false, id: 1 },
-  { name: "Công việc 2", isDone: false, id: 2 },
-  { name: "Công việc 3", isDone: true, id: 3 },
-] as { name: string, isDone: boolean, id: number }[]
+
 
 // Reducer
 // 1. Pure function
@@ -31,7 +26,7 @@ const intialState = [
 // Action {type: string, payload: data}
 
 function App() {
-  const [tasks, dispatch] = useReducer(produce(taskReducer), intialState)
+  const { tasks, dispatch } = useContext(ProductContext)
   const [count, setCount] = useState(0)
 
   // Buổi 1
@@ -58,8 +53,6 @@ function App() {
   // const 
   const memoCountTasks = useMemo(() => countTasks(tasks), [tasks])
 
-  console.log(tasks);
-
 
   // Buổi 2: useReducer
   // 1. AddTodo
@@ -68,6 +61,7 @@ function App() {
   // 4. Đổi trạng thái
 
   // Buổi 2: useContext
+
 
   return <div className="container mx-auto">
     <h1 className="text-2xl bg-red-500 text-center">Todo list</h1>
