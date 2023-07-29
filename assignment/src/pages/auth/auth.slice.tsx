@@ -35,6 +35,9 @@ const AuthSlice = createSlice({
       localStorage.setItem("accessToken", JSON.stringify(action.payload.accessToken))
       state.isLoading = false
     })
+    builder.addCase(signup.rejected, (state) => {
+      state.isLoading = false
+    })
   }
 })
 

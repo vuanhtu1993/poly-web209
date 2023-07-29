@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { signup } from './auth.slice'
-import { AppDispatch } from '../../store'
+import { AppDispatch, RootState } from '../../store'
 import { useContext } from 'react'
 import { MessageContext } from '../../context/message-context'
 
@@ -17,6 +17,7 @@ const SignUp = () => {
   const { register, formState: { errors }, handleSubmit } = useForm<SignupForm>()
   const dispatch = useDispatch<AppDispatch>()
   const { setMessage } = useContext(MessageContext)
+  const { isLoading } = useSelector((state: RootState) => state.auth)
 
   const onSubmit = async ({ lastname, firstname, email, password }: SignupForm) => {
     const user = {
@@ -147,6 +148,10 @@ const SignUp = () => {
                 className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
               >
                 Create an account
+                {isLoading && <div
+                  className="ml-2 inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                  role="status">
+                </div>}
               </button>
             </div>
           </form>
