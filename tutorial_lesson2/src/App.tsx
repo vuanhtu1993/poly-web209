@@ -1,5 +1,8 @@
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo, useReducer, useState } from "react"
 import AddTodo from "./components/addTodo"
+import Status from "./components/status"
+import { produce } from 'immer'
+import taskReducer from "./reducers/task.reducer"
 
 export type Task = {
   name: string,
@@ -13,25 +16,58 @@ const countTasks = (tasks: Task[]) => {
   return tasks.length
 }
 
+const intialState = [
+  { name: "Công việc 1", isDone: false, id: 1 },
+  { name: "Công việc 2", isDone: false, id: 2 },
+  { name: "Công việc 3", isDone: true, id: 3 },
+] as { name: string, isDone: boolean, id: number }[]
+
+// Reducer
+// 1. Pure function
+// (a, b) => a * b
+// random, time (a, b) => a + Math.random(b)*10
+// Side effect
+
+// Action {type: string, payload: data}
+
 function App() {
-  const [tasks, setTasks] = useState([
-    { name: "Công việc 1", isDone: false, id: 1 },
-    { name: "Công việc 2", isDone: false, id: 2 },
-    { name: "Công việc 3", isDone: true, id: 3 },
-  ])
+  const [tasks, dispatch] = useReducer(produce(taskReducer), intialState)
   const [count, setCount] = useState(0)
 
+  // Buổi 1
   // memo
   // useCallback
   // const func1 = useCallback(() => {}, [deps])
   // type: function => Object
   const handleAddTask = useCallback((task: Task) => {
-    setTasks(prev => [...prev, task])
+    // setTasks(prev => [...prev, task])
+    dispatch({
+      type: "ADD",
+      payload: task
+    })
   }, [])
+
+  const handleChangeStatus = (id: number) => {
+    dispatch({
+      type: "CHANGE_STATUS",
+      payload: id
+    })
+  }
   // useMemo
   // const memoFunc1 = useCallback(() => <gia tri>, [deps])
   // const 
   const memoCountTasks = useMemo(() => countTasks(tasks), [tasks])
+
+  console.log(tasks);
+
+
+  // Buổi 2: useReducer
+  // 1. AddTodo
+  // 2. Update
+  // 3. Delete
+  // 4. Đổi trạng thái
+
+  // Buổi 2: useContext
 
   return <div className="container mx-auto">
     <h1 className="text-2xl bg-red-500 text-center">Todo list</h1>
@@ -44,14 +80,7 @@ function App() {
           <h2>stt:{index + 1}</h2>
           <div className="flex justify-between">
             <p>{item.name}</p>
-            {!item.isDone ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
-              className="w-6 h-6 text-red-500">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-              : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
-                className="w-6 h-6 text-green-500">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>}
+            <Status isDone={item.isDone} onClick={() => handleChangeStatus(item.id)} />
           </div>
         </div>)}
       </div>
