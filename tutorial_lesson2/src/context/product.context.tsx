@@ -2,7 +2,12 @@ import { createContext, useReducer } from 'react'
 import taskReducer from '../reducers/task.reducer'
 import { produce } from 'immer'
 
-export const ProductContext = createContext({})
+type ContextType = {
+  tasks: { name: string, isDone: boolean, id: number }[],
+  dispatch: React.Dispatch<{ type: string, payload: any }>
+}
+
+export const ProductContext = createContext<ContextType>({} as any)
 
 const intialState = [
   { name: "Công việc 1", isDone: false, id: 1 },
