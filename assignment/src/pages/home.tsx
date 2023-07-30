@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
-import { IFilm } from '../models'
-import { getAll } from '../api/film'
 import FilmCard from '../components/filmCard'
 import { useDispatch, useSelector } from 'react-redux'
-import { endLoading, fetchFilm, startLoading } from './film/film.reducer'
+import { fetchFilm } from './film/film.reducer'
 import { RootState } from '../store'
 
 const HomePage = () => {
@@ -12,12 +10,8 @@ const HomePage = () => {
 
     useEffect(() => {
         const getFilms = async () => {
-            const data = await getAll()
-            // setFilms(data)
-            dispatch(fetchFilm(data))
-            dispatch(endLoading())
+            dispatch(fetchFilm())
         }
-        dispatch(startLoading())
         getFilms()
 
     }, [])
