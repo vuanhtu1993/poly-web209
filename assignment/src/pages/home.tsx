@@ -1,16 +1,25 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import FilmCard from '../components/filmCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchFilm } from './film/film.reducer'
-import { RootState } from '../store'
+import { AppDispatch, RootState } from '../store'
+import { MessageContext } from '../App'
 
 const HomePage = () => {
-    const dispatch = useDispatch()
+    const { setMessage } = useContext(MessageContext)
+    const dispatch = useDispatch<AppDispatch>()
     const { films, isLoading } = useSelector((state: RootState) => state.films)
 
     useEffect(() => {
         const getFilms = async () => {
-            dispatch(fetchFilm())
+            try {
+                await dispatch(fetchFilm()).unwrap()
+            } catch (err) {
+                setMessage({
+                    type: "error",
+                    message: err
+                })
+            }
         }
         getFilms()
 

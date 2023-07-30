@@ -1,4 +1,4 @@
-import { createReducer, createAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { IFilm } from '../../models'
 import { getAll } from '../../api/film'
 
@@ -8,8 +8,13 @@ const intialState = {
 } as { films: IFilm[], isLoading: boolean }
 
 export const fetchFilm = createAsyncThunk("film/fetch", async (arg, thunkAPI) => {
-    const data = await getAll()
-    return data
+    try {
+        const data = await getAll()
+        return data
+    } catch (err: any) {
+        return thunkAPI.rejectWithValue(err.message)
+    }
+
 })
 
 // export const fetchFilm = createAction<IFilm[]>('film/fetch')
@@ -52,6 +57,9 @@ const filmSlice = createSlice({
         })
         builder.addCase(fetchFilm.fulfilled, (state, action) => {
             state.films = action.payload
+            state.isLoading = false
+        })
+        builder.addCase(fetchFilm.rejected, (state) => {
             state.isLoading = false
         })
     }
