@@ -18,6 +18,7 @@ export const fetchFilms = createAsyncThunk(
         }
     }
 )
+// 3 Action => 3 trang thai pending, fullfiled, rejected
 
 // Acition
 // export const fetchFilms = createAction<IFilm[]>('films/fetch')

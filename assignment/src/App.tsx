@@ -4,8 +4,7 @@ import AddFilmPage from './pages/films/addFilm'
 import MessageProvider from './context/message-context'
 import FilmProvider from './context/film-context'
 import SignUp from './pages/auth/signup'
-
-
+import TodoPage from './pages/todos'
 
 function UserLayout() {
 
@@ -30,7 +29,8 @@ const App = () => {
         { path: "/add", element: <AddFilmPage /> },
       ]
     },
-    { path: "/signup", element: <SignUp /> }
+    { path: "/signup", element: <SignUp /> },
+    { path: "/todos", element: <TodoPage /> },
   ])
   return <RouterProvider router={router} />
 }
