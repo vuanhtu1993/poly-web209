@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchFilm } from './film/film.reducer'
 import { AppDispatch, RootState } from '../store'
 import { MessageContext } from '../App'
+import { Link } from 'react-router-dom'
 
 const HomePage = () => {
     const { setMessage } = useContext(MessageContext)
@@ -26,6 +27,8 @@ const HomePage = () => {
     }, [])
 
     return <div className="container mx-auto">
+        <h1>Menu</h1>
+        <Link to="/add">Thêm mới</Link>
         <header className="flex">
             <img className="w-[80px]" src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png" alt="" />
         </header>

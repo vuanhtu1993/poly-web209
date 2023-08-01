@@ -1,55 +1,23 @@
 import { useContext, useReducer, useState } from "react"
-import { createFilm } from "../../api/film"
-import Message from "../../components/message"
 import { MessageContext } from "../../App"
+import { useForm } from 'react-hook-form'
+import { createFilm, fetchFilm } from "./film.reducer"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "../../store"
 
-type State = {
+type addFilmForm = {
     title: string,
-    isValidTitle: boolean,
-    extract: string,
-    isValidExtract: boolean
-}
-
-const initialState = {
-    title: "",
-    isValidTitle: true,
-    extract: "",
-    isValidExtract: true,
-}
-
-const reducer = (state: State, action: { type: string, payload: string }) => {
-    let isValid: boolean
-    switch (action.type) {
-        case "UPDATE_TITLE":
-            isValid = action.payload.length > 5
-            return { ...state, title: action.payload, isValidTitle: isValid }
-        case "VALIDATE_TITLE":
-            isValid = action.payload.length > 5
-            return { ...state, isValidTitle: isValid }
-        case "UPDATE_EXTRACT":
-            isValid = action.payload.length > 10
-            return { ...state, extract: action.payload, isValidExtract: isValid }
-        case "VALIDATE_EXTRACT":
-            isValid = action.payload.length > 10
-            return { ...state, isValidExtract: isValid }
-        default:
-            return state
-    }
+    extract: string
 }
 
 const AddFilmPage = () => {
-    const [state, dispatch] = useReducer(reducer, initialState)
-    const { message, setMessage } = useContext(MessageContext)
+    const { register, handleSubmit, formState: { errors } } = useForm<addFilmForm>()
+    const { setMessage } = useContext(MessageContext)
+    const dispatch = useDispatch<AppDispatch>()
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+    const onSubmit = async (data: addFilmForm) => {
         try {
-            const data = {
-                title: state.title,
-                extract: state.extract
-            }
-            await createFilm(data)
-            // alert("Thêm mới thành công")
+            await dispatch(createFilm(data)).unwrap()
             setMessage({
                 type: "success",
                 message: "Thêm mới thành công"
@@ -57,19 +25,17 @@ const AddFilmPage = () => {
         } catch (err) {
             setMessage({
                 type: "error",
-                message: "Có lỗi xảy ra"
+                message: err
             })
         }
     }
-
-    console.log(message, "message context");
 
     return <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg text-center">
             <h1 className="text-2xl font-bold sm:text-3xl">Thêm mới Film</h1>
         </div>
 
-        <form action="" onSubmit={handleSubmit} className="mx-auto mb-0 mt-8 max-w-md space-y-4">
+        <form action="" onSubmit={handleSubmit(onSubmit)} className="mx-auto mb-0 mt-8 max-w-md space-y-4">
             <div>
                 <label className="sr-only">Titles</label>
 
@@ -78,16 +44,16 @@ const AddFilmPage = () => {
                         type="text"
                         className="w-full rounded-lg border border-black p-4 pe-12 text-sm shadow-sm"
                         placeholder="Enter title"
-                        onChange={(e) => dispatch({
-                            type: "UPDATE_TITLE",
-                            payload: e.target.value
-                        })}
-                        onBlur={(e) => dispatch({
-                            type: "VALIDATE_TITLE",
-                            payload: e.target.value
-                        })}
+                        {...register("title",
+                            {
+                                required: "Dữ liệu bắt buộc", min: {
+                                    value: 5,
+                                    message: "Tối thiểu 5 ký tự"
+                                }
+                            })
+                        }
                     />
-                    <div className="text-red-500">{!state.isValidTitle ? "Trường dữ liệu không hợp lệ" : ""}</div>
+                    <div className="text-red-500">{errors.title && errors.title.message}</div>
                 </div>
             </div>
 
@@ -98,16 +64,16 @@ const AddFilmPage = () => {
                     <textarea
                         className="w-full rounded-lg border border-black p-4 pe-12 text-sm shadow-sm"
                         placeholder="Enter extract"
-                        onChange={(e) => dispatch({
-                            type: "UPDATE_EXTRACT",
-                            payload: e.target.value
-                        })}
-                        onBlur={(e) => dispatch({
-                            type: "VALIDATE_EXTRACT",
-                            payload: e.target.value
-                        })}
+                        {...register("extract",
+                            {
+                                required: "Dữ liệu bắt buộc", min: {
+                                    value: 5,
+                                    message: "Tối thiểu 5 ký tự"
+                                }
+                            })
+                        }
                     />
-                    <div className="text-red-500">{!state.isValidExtract ? "Trường dữ liệu không hợp lệ" : ""}</div>
+                    <div className="text-red-500">{errors.extract && errors.extract.message}</div>
                 </div>
             </div>
 

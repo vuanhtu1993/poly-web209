@@ -9,7 +9,7 @@ export const getAll = async function () {
     return res.data
 }
 
-export const createFilm = async function (data: { title: string, extract: string }) {
+export const postFilm = async function (data: { title: string, extract: string }) {
     const res = await instance.post('/movies', data)
     return res.data
 }

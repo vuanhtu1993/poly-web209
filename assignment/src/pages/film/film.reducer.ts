@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { IFilm } from '../../models'
-import { getAll } from '../../api/film'
+import { getAll, postFilm } from '../../api/film'
 
 const intialState = {
     films: [],
@@ -15,6 +15,15 @@ export const fetchFilm = createAsyncThunk("film/fetch", async (arg, thunkAPI) =>
         return thunkAPI.rejectWithValue(err.message)
     }
 
+})
+
+export const createFilm = createAsyncThunk("film/create", async (body: { title: string, extract: string }, thunkAPI) => {
+    try {
+        const data = await postFilm(body)
+        return data
+    } catch (err: any) {
+        return thunkAPI.rejectWithValue(err.message)
+    }
 })
 
 // export const fetchFilm = createAction<IFilm[]>('film/fetch')
@@ -60,6 +69,17 @@ const filmSlice = createSlice({
             state.isLoading = false
         })
         builder.addCase(fetchFilm.rejected, (state) => {
+            state.isLoading = false
+        })
+        builder.addCase(createFilm.pending, (state) => {
+            state.isLoading = true
+        })
+        builder.addCase(createFilm.fulfilled, (state, action) => {
+            // Nghiem cam
+            // state.films.push(action.payload)
+            state.isLoading = false
+        })
+        builder.addCase(createFilm.rejected, (state) => {
             state.isLoading = false
         })
     }
