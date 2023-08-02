@@ -20,7 +20,7 @@ export const fetchFilms = createAsyncThunk(
 )
 
 // createAsyncThunk -> 3 action (pending, fulfilled, rejected)
-const createFilm = createAsyncThunk(
+export const createFilm = createAsyncThunk(
   'film/create',
   async (film: IFilm, thunkAPI) => {
     try {

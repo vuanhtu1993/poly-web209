@@ -1,7 +1,7 @@
 import { useContext, useReducer, useState } from "react"
 import { MessageContext } from "../../context/message-context"
 import { useDispatch } from "react-redux"
-import { createFilm, fetchFilms } from "./films.slice"
+import { fetchFilms, createFilm } from "./films.slice"
 import { AppDispatch } from "../../store"
 import { useAddTodoMutation, useGetTodosQuery } from "../../services/todos.service"
 
