@@ -10,10 +10,19 @@ export const todoAPI = createApi({
     }
   }),
   endpoints: builder => ({
-    getTodos: builder.query<ITodo[], string>({
-      query: () => "/todos"
+    // action
+    getTodos: builder.query<ITodo[], void>({
+      query: () => "/todos"  // GET
+    }),
+
+    addTodo: builder.mutation({
+      query: (todo: ITodo) => ({
+        url: `/todos`,
+        method: "POST",
+        body: todo
+      })
     })
   })
 })
 
-export const { useGetTodosQuery } = todoAPI
+export const { useGetTodosQuery, useAddTodoMutation } = todoAPI

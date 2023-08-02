@@ -1,70 +1,71 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { IFilm } from '../../models'
-import { getAll } from '../../api/film'
+import { getAll, postFilm } from '../../api/film'
 
 const intialState = {
-    films: [],
-    isLoading: false
+  films: [],
+  isLoading: false
 } as { films: IFilm[], isLoading: boolean }
 
 export const fetchFilms = createAsyncThunk(
-    'film/fetch',
-    async (arg, thunkAPI) => {
-        try {
-            const data = await getAll()
-            return data
-        } catch (err) {
-            return thunkAPI.rejectWithValue(err)
-        }
+  'film/fetch',
+  async (arg, thunkAPI) => {
+    try {
+      const data = await getAll()
+      return data
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response.data)
     }
+  }
 )
-// 3 Action => 3 trang thai pending, fullfiled, rejected
 
-// Acition
-// export const fetchFilms = createAction<IFilm[]>('films/fetch')
-// export const startLoading = createAction('films/startLoading')
-// export const endLoading = createAction('films/endLoading')
-
-// // fetchFilms() => {type: "films/fetch"}
-// // fetchFilms({a: 10}) => {type: "films/fetch", payload: {a: 10}}
-// // Reducer
-// export const filmsReducer = createReducer(intialState, builder => {
-//     // immerjs
-//     builder.addCase(fetchFilms, (state, action) => {
-//         state.films = action.payload
-//     })
-//     builder.addCase(startLoading, (state) => {
-//         state.isLoading = true
-//     })
-//     builder.addCase(endLoading, (state) => {
-//         state.isLoading = false
-//     })
-// })
+// createAsyncThunk -> 3 action (pending, fulfilled, rejected)
+const createFilm = createAsyncThunk(
+  'film/create',
+  async (film: IFilm, thunkAPI) => {
+    try {
+      const data = await postFilm(film)
+      return data
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
+  }
+)
 
 // Slice
 export const filmSlice = createSlice({
-    name: "films",
-    initialState: intialState,
-    reducers: {
-        fetch: (state, action) => {
-            state.films = action.payload
-        },
-        startLoading: (state) => {
-            state.isLoading = true
-        },
-        endLoading: (state) => {
-            state.isLoading = false
-        }
+  name: "films",
+  initialState: intialState,
+  reducers: {
+    fetch: (state, action) => {
+      state.films = action.payload
     },
-    extraReducers: builder => {
-        builder.addCase(fetchFilms.pending, (state) => {
-            state.isLoading = true
-        })
-        builder.addCase(fetchFilms.fulfilled, (state, action) => {
-            state.films = action.payload
-            state.isLoading = false
-        })
+    startLoading: (state) => {
+      state.isLoading = true
+    },
+    endLoading: (state) => {
+      state.isLoading = false
     }
+  },
+  extraReducers: builder => {
+    builder.addCase(fetchFilms.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(fetchFilms.fulfilled, (state, action) => {
+      state.films = action.payload
+      state.isLoading = false
+    })
+    builder.addCase(createFilm.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(createFilm.fulfilled, (state, action) => {
+      // state.films.push(action.payload)
+      state.isLoading = false
+    })
+    builder.addCase(createFilm.rejected, (state) => {
+      state.isLoading = false
+    })
+  }
 })
 
 export const { fetch, startLoading, endLoading } = filmSlice.actions
