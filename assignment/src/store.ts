@@ -6,8 +6,8 @@ import { filmAPI } from './services/film.service'
 
 export const store = configureStore({
   reducer: {
+    auth: authReducer,
     [filmAPI.reducerPath]: filmAPI.reducer,
-    auth: authReducer
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(filmAPI.middleware)
