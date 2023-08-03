@@ -1,3 +1,22 @@
 {
-  "products": []
+  "products": [
+    {
+      "id": 1,
+      "name": "Product 1",
+      "price": 10000,
+      "description": "Description 1"
+    },
+    {
+      "name": "san pham 3",
+      "price": "1000000",
+      "description": "san pham 3",
+      "id": 2
+    },
+    {
+      "name": "iphoneX",
+      "price": "1000000",
+      "description": "",
+      "id": 3
+    }
+  ]
 }
